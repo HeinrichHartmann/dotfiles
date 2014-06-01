@@ -31,7 +31,7 @@
   )
 
 
-(ensure-package-installed 'magit 'jedi)
+(ensure-package-installed 'magit 'jedi 'markdown-mode)
 
 ;; activate installed packages
 (package-initialize)
