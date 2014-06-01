@@ -55,6 +55,11 @@
 (global-set-key [f9] 'cycle-font)	                ; cf. emacs.d/font-settings.el
 (global-set-key (kbd "C-x g") 'magit-status)            ; requires magit mode installed
 
+;; Multiple cursurs default key bindings
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -117,6 +122,8 @@
 (load "font-settings")	  ; default fonts and font cycle script
 (load "latex-settings")	  ; add hooks for latex
 (load "package-settings") ; el-get settings
+
+
 
 (defun toggle-fullscreen (&optional f)
   (interactive)

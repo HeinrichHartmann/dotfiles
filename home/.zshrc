@@ -81,3 +81,7 @@ alias open="gnome-open"
 alias pylab="ipython qtconsole --matplotlib inline"
 alias pynote="ipython notebook --matplotlib inline"
 alias emacs='emacsclient -c -a ""'
+
+alias ts='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
+alias ds='date +"%F"'      # date stamp
+alias uts='date +%s'       # unix time stamp

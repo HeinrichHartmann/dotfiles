@@ -31,7 +31,7 @@
   )
 
 
-(ensure-package-installed 'magit 'jedi 'markdown-mode)
+(ensure-package-installed 'magit 'jedi 'markdown-mode 'multiple-cursors)
 
 ;; activate installed packages
 (package-initialize)
