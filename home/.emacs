@@ -52,7 +52,9 @@
 (windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
 
 (global-set-key [f11] 'toggle-fullscreen)
-(global-set-key [f9] 'cycle-font)	; cycle fonts with F9
+(global-set-key [f9] 'cycle-font)	                ; cf. emacs.d/font-settings.el
+(global-set-key (kbd "C-x g") 'magit-status)            ; requires magit mode installed
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -112,9 +114,9 @@
 
 (add-to-list 'load-path "~/.emacs.d/")
 
-;;(load "font-settings")	; default fonts and font cycle script
-;;(load "latex-settings")	; add hooks for latex
-
+(load "font-settings")	  ; default fonts and font cycle script
+(load "latex-settings")	  ; add hooks for latex
+(load "package-settings") ; el-get settings
 
 (defun toggle-fullscreen (&optional f)
   (interactive)
