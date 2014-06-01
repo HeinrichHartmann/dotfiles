@@ -1,5 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; general settings
+;; General Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (menu-bar-mode 1)			; show the menu...
 (tool-bar-mode -1)			; ... but not the the toolbar
 (ruler-mode -1)				; kein Lineal
@@ -31,13 +32,10 @@
       interprogram-paste-function	; ...with...
       'x-cut-buffer-or-selection-value)	; ...other X clients
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Keyboard Bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (require 'smart-tab)
-;; (global-set-key (kbd "<tab>") 'smart-indent)  ;; auto indent
-;; (global-set-key (kbd "<tab>") 'smart-tab)     ;; auto complete / indent
-
-
-;; CUSOM BINDINGS
 (global-set-key (kbd "s-o") 'other-window)              ; quick window change (s=WinKey)
 (global-set-key (kbd "C-x $") 'ispell-buffer)		; spell check
 (global-set-key (kbd "C-x !") 'eshell)	         	; eshell
@@ -53,14 +51,29 @@
 
 (windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
 
-(add-to-list 'load-path "~/.emacs.d/")
-;; LOAD more complex SETTINGS from different files
-;;(load "tabbar-settings")		; Settings for tabbar mode
-;; (load "org-settings")			; Org mode settings 
-;;(load "font-settings")			; default fonts and font cycle script
-;;(global-set-key [f9] 'cycle-font)	; cycle fonts with F9
-(load "latex-settings")			; add hooks for latex
-;;(load "gnus-settings")                  ; GNUS settings (email)
+(global-set-key [f11] 'toggle-fullscreen)
+(global-set-key [f9] 'cycle-font)	; cycle fonts with F9
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Aliases
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defalias 'yes-or-no-p 'y-or-n-p) ; y or n promting
+
+(defalias 'indent-regexp 'align-regexp)
+(defalias 'ar 'align-regexp)
+
+(defalias 'cr 'comment-region)
+(defalias 'ucr 'uncomment-region)
+(defalias 'sc 'ispell-buffer)
+
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ee 'eval-expression)
+(defalias 'elm 'emacs-lisp-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mode Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'calendar-today-visible-hook 'calendar-mark-today) ; Mark today in calendar mode
 (add-hook 'diary-display-hook 'diary-fancy-display) ;; include org agenda in diary
@@ -78,28 +91,6 @@
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
 
-;; auto-complete mode (very nice auto completion with GUI menu, only works well for programming languages)
-;; (require 'auto-complete-config)
-;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;; (ac-config-default)
-;; (add-hook 'LaTeX-mode-hook 'auto-complete-mode)
-
-
-;; CUSOM Aliases
-(defalias 'yes-or-no-p 'y-or-n-p) ; y or n promting
-
-(defalias 'indent-regexp 'align-regexp)
-(defalias 'ar 'align-regexp)
-
-(defalias 'cr 'comment-region)
-(defalias 'ucr 'uncomment-region)
-(defalias 'sc 'ispell-buffer)
-
-(defalias 'eb 'eval-buffer)
-(defalias 'er 'eval-region)
-(defalias 'ee 'eval-expression)
-(defalias 'elm 'emacs-lisp-mode)
-
 ;; Omit hidden files in dired mode
 (require 'dired-x)
 (setq dired-omit-files
@@ -115,6 +106,15 @@
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load External Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path "~/.emacs.d/")
+
+;;(load "font-settings")	; default fonts and font cycle script
+;;(load "latex-settings")	; add hooks for latex
+
 
 (defun toggle-fullscreen (&optional f)
   (interactive)
@@ -125,36 +125,9 @@
 			   (progn (setq old-fullscreen current-value)
 				  'fullboth)))))
 
-(global-set-key [f11] 'toggle-fullscreen)
-
-
-;; Call wc -w to count words in buffer
-(defun word-count nil "Count words in buffer" (interactive)
-(shell-command-on-region (point-min) (point-max) "wc -w"))
-
-(setq delete-by-moving-to-trash nil)
-
 ;; Encrytion settings
 (require 'epa-file)
 (epa-file-enable) ;; auto encrypt gpg files
-
-;;; This is the binary name of my scheme implementation
-(setq scheme-program-name "mzscheme")
-
-;; (require 'yasnippet-bundle)
-;; (define-key function-key-map [(control tab)] [?\M-\t])
-
-(require 'package)
-;; Add the original Emacs Lisp Package Archive
-;(add-to-list 'package-archives
-;             '("elpa" . "http://tromey.com/elpa/"))
-;; Add the user-contributed repository
-;(add-to-list 'package-archives
-;             '("marmalade" . "http://marmalade-repo.org/packages/"))
-
-(add-to-list 'package-archives
-  '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
 
 ;; JEDI PYTHON EDITOR
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -163,8 +136,7 @@
 
 (add-hook 'python-mode-hook 'jedi:ac-setup)
 
-
-;; Custom bindings for R.md
+;; Markdown/R-files R.md
 (defun markdown-r-keys ()
   "my keys for `Markdown/R mode'."
   (interactive)
@@ -172,9 +144,7 @@
   )
 (add-hook 'markdown-mode-hook 'markdown-r-keys)
 
-
 ;; ORG MODE
-
 (add-to-list 'load-path "~/git/org-reveal")
 (add-to-list 'load-path "~/git/org-mode/lisp")
 (add-to-list 'load-path "~/git/org-mode/contrib/lisp" t)
@@ -185,20 +155,10 @@
 (require 'ox-taskjuggler)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EMACS CUSTOMIZATION
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; el-get package management
-
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
-
-(el-get 'sync)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
