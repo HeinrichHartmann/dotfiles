@@ -65,7 +65,7 @@ export PATH="/home/hartmann/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/lo
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='emacsclinet -c -a "" -nw'
+  export EDITOR='emacsclient -c -a "" -nw'
 else
   export EDITOR='emacsclient -c -a ""'
 fi
@@ -76,7 +76,7 @@ fi
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-alias e='emacsclinet -c -a "" -nw'
+alias e='emacsclient -c -a "" -nw'
 alias open="gnome-open"
 alias pylab="ipython qtconsole --matplotlib inline"
 alias pynote="ipython notebook --matplotlib inline"
