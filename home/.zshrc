@@ -64,11 +64,11 @@ export PATH="/home/hartmann/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/lo
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='emacsclinet -c -a "" -nw'
+else
+  export EDITOR='emacsclient -c -a ""'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -80,5 +80,4 @@ alias e='emacsclinet -c -a "" -nw'
 alias open="gnome-open"
 alias pylab="ipython qtconsole --matplotlib inline"
 alias pynote="ipython notebook --matplotlib inline"
-
 alias emacs='emacsclient -c -a ""'
