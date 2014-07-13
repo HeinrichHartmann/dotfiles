@@ -1,4 +1,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load External Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path "~/.emacs.d/")
+
+(load "package-settings") ; el-get settings
+(load "font-settings")	  ; default fonts and font cycle script
+(load "latex-settings")	  ; add hooks for latex
+
+(require 'multiple-cursors)
+
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (menu-bar-mode 1)			; show the menu...
@@ -113,17 +130,6 @@
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load External Settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-to-list 'load-path "~/.emacs.d/")
-
-(load "font-settings")	  ; default fonts and font cycle script
-(load "latex-settings")	  ; add hooks for latex
-(load "package-settings") ; el-get settings
-
-
 
 (defun toggle-fullscreen (&optional f)
   (interactive)
@@ -179,7 +185,9 @@
  '(lua-indent-level 2)
  '(markdown-css-path "http://kevinburke.bitbucket.org/markdowncss/markdown.css")
  '(markdown-xhtml-header-content "<style> p { text-align:
- justify; } </style>"))
+ justify; } </style>")
+ '(show-trailing-whitespace t)
+ '(todotxt-file "/home/hartmann/Dropbox/todo/todo.txt" nil (todotxt)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
