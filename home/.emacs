@@ -21,13 +21,11 @@
 (menu-bar-mode 1)			; show the menu...
 (tool-bar-mode -1)			; ... but not the the toolbar
 (ruler-mode -1)				; kein Lineal
-;;(tabbar-mode t)				; Tabbar mode
+(tabbar-mode t)				; Tabbar mode
 (iswitchb-mode t)			; Show auto completin in buffer menu..
 (icomplete-mode t)			; and other minibuffer menus
 (setq icomplete-prospects-height 1)	; ...only one line
 ;(partial-completion-mode t)		; show partial results at tab-completion
-
-(set-face-attribute 'default nil :height 120)
 
 (scroll-bar-mode t)			; show a scrollbar...
 (set-scroll-bar-mode 'right)		; ... on the right
@@ -38,10 +36,6 @@
 
 (when (fboundp 'set-fringe-mode)	; emacs22+ 
   (set-fringe-mode 2))			; space left of col1 in pixels
-					; Work with visible lines not with (wrapped,) logical lines 
-(visual-line-mode 0)    		; 1 for on, 0 for off.
-
-(setq fill-column 80)			; Break lines at colum x
 
 (transient-mark-mode t)			; make the current 'selection' visible
 (delete-selection-mode -1)		; do not delete the selection with a keypress
@@ -49,34 +43,48 @@
       interprogram-paste-function	; ...with...
       'x-cut-buffer-or-selection-value)	; ...other X clients
 
+
+					; Work with visible lines not with (wrapped,) logical lines 
+(visual-line-mode 0)    		; 1 for on, 0 for off.
+
+(setq fill-column 80)			; Break lines at colum x
+
+(set-face-attribute 'default nil :height 120) ; set default font size
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
 (global-set-key (kbd "s-o") 'other-window)              ; quick window change (s=WinKey)
 (global-set-key (kbd "C-x $") 'ispell-buffer)		; spell check
 (global-set-key (kbd "C-x !") 'eshell)	         	; eshell
-(global-set-key (kbd "C-x C-a") 'align-regexp)		; align regexp : indent
-(global-set-key (kbd "C-x a") 'align)       		; align 
-;; (global-unset-key "\C-z")				; disable suspend
+(global-set-key (kbd "C-x a") 'align-regexp)       	; align
 (global-set-key (kbd "C-x c") 'calendar)		; show calendar
-(global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; show menubar
 (global-set-key (kbd "C-x t") 'toggle-truncate-lines)	; warp long lines
-;(global-unset-key "\C-\\")                             ; disable input method switch
 (global-set-key (kbd "C-\\") 'dabbrev-expand)		; auto complete? (=M-/)
-(global-set-key (kbd "M-<f5>") 'revert-buffer)          ; quick window change (s=WinKey)
 
-(windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
-
-(global-set-key [f11] 'toggle-fullscreen)
-(global-set-key [f9] 'cycle-font)	                ; cf. emacs.d/font-settings.el
-(global-set-key (kbd "C-x g") 'magit-status)            ; requires magit mode installed
+;; function keys
+(global-set-key (kbd "<f11>") 'toggle-fullscreen)
+(global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
+(global-set-key (kbd "M-<f5>") 'revert-buffer)          ; revert buffer from file
+(global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
+(global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
 
 ;; Multiple cursurs default key bindings
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+
+;; Tabbar mode navigation
+(global-set-key (kbd "M-<left>") 'tabbar-backward-tab)
+(global-set-key (kbd "M-<right>") 'tabbar-forward-tab)
+
+;; MAGIT
+(global-set-key (kbd "C-x g") 'magit-status)
+
+(global-unset-key (kbd "C-z"))				; disable suspend
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -105,7 +113,7 @@
 
 ;; Natural keybindings for iswichtb
 (defun iswitchb-local-keys ()
-  (mapc (lambda (K) 
+  (mapc (lambda (K)
 	  (let* ((key (car K)) (fun (cdr K)))
 	    (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
 	'(("<right>" . iswitchb-next-match)
@@ -113,7 +121,6 @@
 	  ("<up>"    . ignore             )
 	  ("<down>"  . ignore             ))))
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
-
 
 ;; Omit hidden files in dired mode
 (require 'dired-x)
@@ -169,6 +176,9 @@
 (require 'ox-reveal)
 (require 'ox-taskjuggler)
 
+
+;; DGDB MODE
+(setq gdb-show-main 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS CUSTOMIZATION

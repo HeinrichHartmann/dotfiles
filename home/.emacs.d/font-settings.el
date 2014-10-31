@@ -8,7 +8,7 @@ Warning: tested on Windows Vista only."
 
   (let (fontList fontToUse currentState)
     ;; states starts from 1.
-    (setq fontList (list "DejaVu Sans" "DejaVu Sans Mono" "Ubuntu Mono"))
+    (setq fontList (list "Ubuntu Mono" "DejaVu Serif" "DejaVu Sans" "DejaVu Sans Mono"))
     (setq currentState (if (get this-command 'state) (get this-command 'state) 1))
     (setq fontToUse (nth (1- currentState) fontList))
 
