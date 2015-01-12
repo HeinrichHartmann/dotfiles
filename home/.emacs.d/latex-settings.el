@@ -5,11 +5,10 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)	; with AUCTeX LaTeX mode
 
 ;; Emacs Latex mode settings
-
 (add-hook 'latex-mode-hook 'flyspell-mode)
 (add-hook 'latex-mode-hook 'flyspell-buffer)
-(add-hook 'latex-mode-hook 'visual-line-mode)
-(add-hook 'latex-mode-hook (lambda() (set-visual-wrap-column 100)))
+;; (add-hook 'latex-mode-hook 'visual-line-mode)
+;; (add-hook 'latex-mode-hook (lambda() (set-visual-wrap-column 100)))
 (add-hook 'latex-mode-hook 'turn-on-reftex)	; with Emacs latex mod
 
 ; (add-hook 'latex-mode-hook '(local-set-key (kbd "C-\\") 'TeX-complete-symbol))

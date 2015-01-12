@@ -51,6 +51,18 @@
 
 (set-face-attribute 'default nil :height 120) ; set default font size
 
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+
+;; show fill directoy in frame title
+;; http://stackoverflow.com/questions/3669511/the-function-to-show-current-files-full-path-in-mini-buffer
+(setq frame-title-format
+      (list (format "%s %%S: %%j" (system-name))
+            '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -67,7 +79,7 @@
 ;; function keys
 (global-set-key (kbd "<f11>") 'toggle-fullscreen)
 (global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
-(global-set-key (kbd "M-<f5>") 'revert-buffer)          ; revert buffer from file
+(global-set-key (kbd "M-<f5>") 'revert-buffer)      ; revert buffer from file
 (global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
 (global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
 
@@ -102,6 +114,8 @@
 (defalias 'er 'eval-region)
 (defalias 'ee 'eval-expression)
 (defalias 'elm 'emacs-lisp-mode)
+
+(defun .emacs () (interactive) (find-file "~/.emacs"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode Settings
@@ -190,7 +204,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
- '(custom-enabled-themes (quote (wombat)))
+ '(custom-enabled-themes (quote (tango)))
  '(inhibit-startup-screen t)
  '(lua-indent-level 2)
  '(markdown-css-path "http://kevinburke.bitbucket.org/markdowncss/markdown.css")
@@ -203,10 +217,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-latex-sectioning-0-face ((t (:inherit font-latex-sectioning-1-face))))
- '(font-latex-sectioning-1-face ((t (:inherit font-latex-sectioning-2-face))))
- '(font-latex-sectioning-2-face ((t (:inherit font-latex-sectioning-3-face))))
- '(font-latex-sectioning-3-face ((t (:inherit font-latex-sectioning-4-face))))
- '(font-latex-sectioning-4-face ((t (:inherit font-latex-sectioning-5-face))))
- '(font-latex-subscript-face ((t nil)))
- '(font-latex-superscript-face ((t nil))))
+ '(font-latex-sectioning-0-face ((t (:inherit font-latex-sectioning-1-face))) t)
+ '(font-latex-sectioning-1-face ((t (:inherit font-latex-sectioning-2-face))) t)
+ '(font-latex-sectioning-2-face ((t (:inherit font-latex-sectioning-3-face))) t)
+ '(font-latex-sectioning-3-face ((t (:inherit font-latex-sectioning-4-face))) t)
+ '(font-latex-sectioning-4-face ((t (:inherit font-latex-sectioning-5-face))) t)
+ '(font-latex-subscript-face ((t nil)) t)
+ '(font-latex-superscript-face ((t nil)) t))

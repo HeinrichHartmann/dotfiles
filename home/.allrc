@@ -1,0 +1,72 @@
+export PATH=~/Programs/anaconda/bin:$PATH
+
+alias open="gnome-open"
+alias o="gnome-open"
+
+alias emacs='emacsclient -c -a ""'
+alias e='emacsclient -c -a "" -nw'
+
+alias pylab="ipython qtconsole --matplotlib inline"
+alias pynote='ipython notebook --matplotlib inline --script --notebook-dir="~/git/notes"'
+# --matplotlib inline: show graphics inline
+# --script: store py along with ipy files
+
+alias emacs='emacsclient -c -a ""'
+
+#
+# Timestamp
+#
+alias dateiso='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
+alias today='date +"%F"' # date stamp
+alias uts='date +%s' # unix time stamp
+
+# Password generator
+pwdgen() {
+	local l=$1
+    [ "$l" == "" ] && l=16
+    tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
+
+
+#
+# APT
+#
+function apt-history(){
+      case "$1" in
+        install)
+              cat /var/log/dpkg.log | grep 'install ' 
+              ;;
+        upgrade|remove)
+              cat /var/log/dpkg.log | grep $1
+              ;;
+        rollback)
+              cat /var/log/dpkg.log | grep upgrade | \
+                  grep "$2" -A10000000 | \
+                  grep "$3" -B10000000 | \
+                  awk '{print $4"="$5}'
+              ;;
+        *)
+              cat /var/log/dpkg.log
+              ;;
+      esac
+}
+
+function apt-tail(){
+    cat /var/log/dpkg.log | grep 'install ' | tail -n $1
+}
+
+alias install="sudo apt-get install"
+
+#
+# Todo.txt
+#
+
+alias td="$HOME/git/todo.txt-cli/todo.sh -d $HOME/git/todo.txt-cli/todo.cfg"
+alias etd="emacs -nw $HOME/Dropbox/todo/todo.txt"
+
+#
+# Antlr
+#
+export CLASSPATH=".:/usr/local/lib/antlr-4.2-complete.jar:$CLASSPATH"
+alias antlr4='java -jar /usr/local/lib/antlr-4.4-complete.jar'
+alias grun='java org.antlr.v4.runtime.misc.TestRig'

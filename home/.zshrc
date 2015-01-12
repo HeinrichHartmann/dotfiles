@@ -76,25 +76,6 @@ fi
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-alias e='emacsclient -c -a "" -nw'
+source ~/.nvm/nvm.sh
 
-alias open="gnome-open"
-alias o="gnome-open"
-
-alias pylab="ipython qtconsole --matplotlib inline"
-alias pynote="ipython notebook --matplotlib inline --script"
-# --matplotlib inline: show graphics inline
-# --script: store py along with ipy files
-
-alias emacs='emacsclient -c -a ""'
-
-alias ts='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
-alias ds='date +"%F"'      # date stamp
-alias uts='date +%s'       # unix time stamp
-
-alias td="$HOME/git/todo.txt-cli/todo.sh -d $HOME/git/todo.txt-cli/todo.cfg"
-alias etd="emacs -nw $HOME/Dropbox/todo/todo.txt"
-
-export CLASSPATH=".:/usr/local/lib/antlr-4.2-complete.jar:$CLASSPATH"
-alias antlr4='java -jar /usr/local/lib/antlr-4.4-complete.jar'
-alias grun='java org.antlr.v4.runtime.misc.TestRig'
+source ~/.allrc
