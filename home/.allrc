@@ -7,8 +7,8 @@ alias emacs='emacsclient -c -a ""'
 alias e='emacsclient -c -a "" -nw'
 
 PYROOT=~/Programs/anaconda/bin
-alias pylab="$PYROOT/ipython qtconsole --matplotlib inline"
-alias pynote='$PYROOT/ipython notebook --matplotlib inline --script'
+alias pylab="$PYROOT/ipython qtconsole"
+alias pynote="$PYROOT/ipython notebook"
 # --matplotlib inline: show graphics inline
 # --script: store py along with ipy files
 
@@ -17,7 +17,7 @@ alias emacs='emacsclient -c -a ""'
 #
 # Timestamp
 #
-alias dateiso='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
+alias date-iso='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
 alias today='date +"%F"' # date stamp
 alias uts='date +%s' # unix time stamp
 
@@ -71,3 +71,41 @@ alias etd="emacs -nw $HOME/Dropbox/todo/todo.txt"
 export CLASSPATH=".:/usr/local/lib/antlr-4.2-complete.jar:$CLASSPATH"
 alias antlr4='java -jar /usr/local/lib/antlr-4.4-complete.jar'
 alias grun='java org.antlr.v4.runtime.misc.TestRig'
+
+
+#
+# scanner pdf handling
+#
+
+DOC_ROOT=/home/hartmann/Documents
+
+function scan_collate {
+    pdftk A="$1" B="$2" shuffle A Bend-1S output "$3"
+}
+
+alias scan_merge="pdfunite"
+
+function scan_get {
+    A=`newest ~/scanner/`
+    B="$DOC_ROOT/`date +%F`_$1.pdf"
+    mv "$A" "$B"
+    echo "Moved $A to $B"
+}
+
+function archive {
+    B="$DOC_ROOT/`date +%F`_$1"
+    cp "$1" "$B"
+    echo "Archived $1 to $B"
+    ls -l "$B"
+}
+
+function stamp {
+    mv "$1" "`date +%F`_$1"
+}
+
+#
+# Safe filename handling
+#
+# Those have problems with ordering of command line arguments. "Path" must precede expressions.
+#alias find0="find -print0"
+#alias xargs0="xargs -0"

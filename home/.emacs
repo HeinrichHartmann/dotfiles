@@ -62,6 +62,24 @@
             '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
 
+;; AutoSave files in /tmp/
+;; http://emacswiki.org/emacs/AutoSave
+;; Save all tempfiles in $TMPDIR/emacs$UID/                                                        
+(defconst emacs-tmp-dir (format "%s%s%s/" temporary-file-directory "emacs" (user-uid)))
+(setq backup-directory-alist `((".*" . ,emacs-tmp-dir)))
+(setq auto-save-file-name-transforms `((".*" ,emacs-tmp-dir t)))
+(setq auto-save-list-file-prefix emacs-tmp-dir)
+
+;; auto-deploy
+;; http://stackoverflow.com/questions/6368742/how-to-run-hook-depending-on-file-location
+(setq auto-deploy nil)
+(add-hook 'after-save-hook (lambda() 
+                             (when auto-deploy
+                               (message "Running auto-deploy")
+                               (shell-command "/home/hartmann/es_workbench/deploy.sh")
+                               )
+                             )
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard Bindings
@@ -96,7 +114,7 @@
 ;; MAGIT
 (global-set-key (kbd "C-x g") 'magit-status)
 
-(global-unset-key (kbd "C-z"))				; disable suspend
+;; (global-unset-key (kbd "C-z"))				; disable suspend
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -194,6 +212,12 @@
 ;; DGDB MODE
 (setq gdb-show-main 1)
 
+;; TRAMP MODE
+(require 'tramp)
+(tramp-cleanup-all-connections)
+(setq tramp-default-method "ssh")
+(defalias 'tc 'tramp-cleanup-all-connections)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS CUSTOMIZATION
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -204,13 +228,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
+ '(csv-separators (quote ("	" "	")))
  '(custom-enabled-themes (quote (tango)))
  '(inhibit-startup-screen t)
  '(lua-indent-level 2)
  '(markdown-css-path "http://kevinburke.bitbucket.org/markdowncss/markdown.css")
  '(markdown-xhtml-header-content "<style> p { text-align:
  justify; } </style>")
- '(show-trailing-whitespace t)
+ '(safe-local-variable-values (quote ((auto-deploy . t))))
  '(todotxt-file "/home/hartmann/Dropbox/todo/todo.txt" nil (todotxt)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
