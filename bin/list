@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR="$1"
+shift
+
+if [ "$1" = "--full" ]; then
+    FIND_FORMAT="%h/%f\n"
+    shift
+elif [ "$1" = "--fmt" ]; then
+    shift
+    FIND_FORMAT="$1"
+    shift
+else
+    FIND_FORMAT="%P\n"
+fi
+
+if [ -z $1 ]; then
+    find "$DIR" -type f -printf "$FIND_FORMAT" | grep -v "~$" | grep -v "#$" | sort
+else
+    find "$DIR" -type f -printf "$FIND_FORMAT" | grep -v "~$" | grep -v "#$" | sort | grep $@
+fi

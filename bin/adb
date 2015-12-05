@@ -1,0 +1,1 @@
+/home/hartmann/Programs/android-studio/sdk/platform-tools/adb

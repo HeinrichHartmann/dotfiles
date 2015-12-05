@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import sh
+import sys
+import os
+
+DEFAULT_DIR = "/media/MicroSD/"
+
+args = sys.argv[1:]
+target = args[-1]
+sources = args[:-1]
+
+if os.path.exists(target):
+    sources += [ target ]
+    target = DEFAULT_DIR
+
+target = target.rstrip("/")
+
+PREFIX = sh.date('+%F').stdout.strip() + "_"
+TARGET = target + "/" + PREFIX + sources[0] + ".tar.gz"
+
+sh.tar('czvf', TARGET, *sources)
+
+print "Wrote", TARGET

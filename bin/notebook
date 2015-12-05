@@ -1,0 +1,2 @@
+#!/bin/bash
+/home/hartmann/Programs/anaconda/bin/ipython notebook --matplotlib inline --script --notebook-dir ~/git/notes

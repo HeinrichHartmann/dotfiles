@@ -1,0 +1,21 @@
+#!/bin/bash
+
+COMMAND="$1"
+CONFIG="$2"
+
+if [ -z "$COMMAND" ] || [ -z "$CONFIG" ]
+then
+    printf "Usage: $0 <comand> <config>"
+    exit 1
+fi
+
+function feed() {
+    # Shell spearation of $2 into multiple arguments
+    $1 $2
+}
+export -f feed
+
+cat "$CONFIG" | grep -v "^#" |\
+    parallel --no-notice --delimiter "\n" "feed $COMMAND"
+
+printf "All Done\n"

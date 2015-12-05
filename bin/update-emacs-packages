@@ -1,0 +1,3 @@
+#!/bin/bash
+
+emacs -batch -u "$USER" -f package-utils-upgrade-all -kill

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+LIMIT=-1
+while [[ $# > 0 ]]
+do
+    key="$1"
+    case $key in
+        -n)
+            LIMIT="$2"
+            shift
+            ;;
+        *)
+            FILE="$1"
+            ;;
+    esac
+    shift
+done
+
+COUNTER=0
+while [ $COUNTER -ne $LIMIT ];
+do
+let COUNTER=COUNTER+1
+shuf -n 1 $FILE
+done

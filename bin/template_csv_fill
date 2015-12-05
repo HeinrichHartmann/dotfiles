@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+from jinja2 import Template
+import argparse
+import csv
+import sys
+import os
+from itertools import islice
+
+parser = argparse.ArgumentParser(description="Fill template with CSV data.")
+parser.add_argument('--template', '-t',   help="template file to use", required=True)
+parser.add_argument('--output-dir', '-o', help="where to store filled templates", default=".")
+parser.add_argument('--delimiter', '-d',  help="delimiter of input csv file", default="\t")
+parser.add_argument('--csv-header',       help="use if csv files containes headers", action='store_true')
+parser.add_argument('--csv-infer',        help="guess CSV dialect by sniffing the first [n] lines", metavar ="n", nargs="?",default=0, type=int)
+parser.add_argument('--name-pattern',     help="pattern for file name creation", default="{{template}}.{{rowc}}.test")
+parser.add_argument('csv_file',           help="input csv file. Deafult: stdin", nargs="?")
+args = parser.parse_args()
+
+print(args)
+
+jinja_syntax = dict(
+    block_start_string    = "{%",
+    block_end_string      = "%}",
+    variable_start_string = "{{",
+    variable_end_string   = "}}",
+    comment_start_string  = "{\#",
+    comment_end_string    = "\#}"
+    )
+
+dialect = csv.excel()
+dialect.delimiter = args.delimiter
+dialect.doublequote = False,
+dialect.skipinitialspace = False
+
+with open(args.template,"r") as fh:
+    template = Template(fh.read(), **jinja_syntax)
+
+name_template = Template(args.name_pattern, **jinja_syntax)
+
+if args.csv_infer == 0:
+    csv_infer_enabled = False
+    csv_infer_lines   = 0
+elif args.csv_infer is None:
+    # --csv-infer provided without argument
+    csv_infer_enabled = True
+    csv_infer_lines   = 10
+elif args.csv_infer > 0:
+    csv_infer_enabled = True
+    csv_infer_lines   = args.csv_infer
+else:
+    raise(Exception("Illegal argument " + args.csv_infer))
+
+has_header = args.csv_header
+
+try: # open csv_file
+    if args.csv_file == None:
+        fh = sys.stdin
+    else:
+        fh = open(args.csv_file,"r")
+
+    if csv_infer_enabled:
+        if fh.isatty(): raise(Exception("Cannot infer from tty"))
+        p = fh.tell()
+        sniffer = csv.Sniffer()
+        sample = "\n".join(list(islice(fh, 0, csv_infer_lines)))
+        fh.seek(p)
+
+        dialect = sniffer.sniff(sample)
+        has_header = sniffer.has_header(sample)
+        print("Inferred delimiter '{}', and headers {}".format(dialect.delimiter, has_header))
+
+    reader = csv.reader(fh, dialect = dialect)
+        
+    keygen = lambda row: {}
+    if has_header:
+        keys = reader.next()
+        print("Using csv header:",keys)
+        keygen = lambda row: dict(zip(keys,row))
+
+    for i,row in enumerate(reader):
+        out_file = name_template.render(
+            template = os.path.basename(args.template),
+            rowc = str(i),
+            row = row,
+            **keygen(row))
+        out_path = os.path.join(args.output_dir, out_file)
+        print("Processing {} > {}".format(row, out_path))
+        with open(out_path, "w") as out_file:
+            out_file.write(template.render(row = row, **keygen(row)))
+
+finally:
+    fh.close()

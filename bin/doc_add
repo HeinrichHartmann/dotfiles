@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+import sh
+import sys
+import os
+
+DOC_DIR = "/home/hartmann/Dropbox/Documents/"
+SHA_DIR = "/home/hartmann/SHA/"
+
+sh.mkdir("-p", DOC_DIR)
+sh.mkdir("-p", SHA_DIR)
+
+def createShaLink(f):
+    # f -- absolute file location as string
+    sha = sh.shasum(f).stdout[0:40]
+    try:
+        sh.ln("-s",f, SHA_DIR + sha)
+    except sh.ErrorReturnCode:
+        print "File already present.\n", sh.ls("-l", SHA_DIR + sha)
+        exit(1)
+        
+
+def mvToDocuments(f, t_name = None):
+    # moves f to DOC_DIR.
+    # returns absulute path of target file
+
+    s_path = os.path.realpath(f)
+    if not os.path.isfile(s_path): raise Exception("Not a file")
+
+    if t_name is None:
+        s_dir, s_file = os.path.split(s_path)
+        t_name = s_file
+
+    t_path = DOC_DIR + t_name
+    sh.mv(s_path, t_path)
+    return t_path
+
+def get(lst,idx,default = None):
+    try:
+        return lst[idx]
+    except IndexError:
+        return default
+
+if __name__ == "__main__":
+    f = get(sys.argv,1)
+    t_name = get(sys.argv,2)
+
+    if f == None:
+        print "Usage:", sys.argv[0], "file [target-file-name]"
+        exit(1)
+    
+    t_path = mvToDocuments(f, t_name)
+    createShaLink(t_path)
+
+    print "Moved", f, "to", t_path

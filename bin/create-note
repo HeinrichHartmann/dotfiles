@@ -1,0 +1,14 @@
+#!/bin/bash
+
+BASE_DIR="$HOME/git/notes"
+DATE="$(date +%Y-%m-%d)"
+FILENAME="$BASE_DIR/${DATE}_${1}.md"
+
+if [ ! -e $FILENAME ]
+then
+    printf "Creating $FILENAME\n"
+    printf "# $1\n\n" > "$FILENAME"
+    printf "Created: $DATE\n" >> "$FILENAME"
+fi
+    
+$EDITOR "$FILENAME"

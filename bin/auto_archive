@@ -1,0 +1,46 @@
+#!/bin/bash
+set -e
+
+SCRIPTNAME=$(basename $0)
+function log() {
+    printf "$@\n"
+    logger -t "$SCRIPTNAME" "$@"
+}
+
+OUT_DIR=$(realpath --canonicalize-existing ${1:-"."})
+# full path withoug trailing /
+
+STAGE_DIR=${2:-"$OUT_DIR/STAGE"}
+if [ -d "$STAGE_DIR" ]
+then
+    log "Stage dir exists."
+    exit 1
+else
+    log "Creating Stage dir $STAGE_DIR"
+    mkdir -p "$STAGE_DIR"
+fi
+
+function cleanup() {
+    log "Removeing ${STAGE_DIR}"
+    rmdir "${STAGE_DIR}"
+}
+
+trap "cleanup" EXIT
+
+log "Watching $STAGE_DIR; Writing to $OUT_DIR"
+inotifywait \
+    --event "CLOSE_WRITE" \
+    --format "%f" \
+    --monitor \
+    --quiet \
+    "$STAGE_DIR" | (
+    while read FILENAME
+    do
+        STAGE_FILE="${STAGE_DIR}/${FILENAME}"
+        OUT_FILE="${OUT_DIR}/$(date +%F)_${FILENAME}"
+        log "Archiving ${STAGE_FILE} to ${OUT_FILE}"
+        mv "${STAGE_FILE}"  "${OUT_FILE}"
+    done
+)
+
+rm ${STAGE_DIR}

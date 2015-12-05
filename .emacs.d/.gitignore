@@ -1,0 +1,14 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!*.el
+# ...even if they are in subdirectories
+!*/
+
+session.*
+el-get
+elpa
+auto-save-list
+image-dired

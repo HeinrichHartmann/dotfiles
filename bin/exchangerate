@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SITE=http://www.ecb.europa.eu/rss/fxref-$1.html
+DOC=`curl "$SITE" -s`
+
+RATE=`echo $DOC | xpath -q -e '/descendant::item[1]//cb:value/text()'`
+DATE=`echo $DOC | xpath -q -e '/descendant::item[1]//dc:date/text()'`
+
+printf "Exchange rate on $DATE is 1 EUR = $RATE $1\n"
