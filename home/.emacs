@@ -2,39 +2,35 @@
 ;; Load External Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path "~/.emacs.d/")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (load "package-settings") ; el-get settings
 (load "font-settings")	  ; default fonts and font cycle script
 (load "latex-settings")	  ; add hooks for latex
 
 (require 'multiple-cursors)
-
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  )
+(require 'visual-regexp-steroids)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(menu-bar-mode 1)			; show the menu...
+(setq-default major-mode 'text-mode) ; edit files in text mode per default
+
+(menu-bar-mode -1)			; show the menu...
 (tool-bar-mode -1)			; ... but not the the toolbar
 (ruler-mode -1)				; kein Lineal
-(tabbar-mode t)				; Tabbar mode
-(iswitchb-mode t)			; Show auto completin in buffer menu..
-(icomplete-mode t)			; and other minibuffer menus
+(tabbar-mode -1)				; Tabbar mode
+(icomplete-mode t)			; Show auto completin in minibuffer menus
 (setq icomplete-prospects-height 1)	; ...only one line
-;(partial-completion-mode t)		; show partial results at tab-completion
 
-(scroll-bar-mode t)			; show a scrollbar...
-(set-scroll-bar-mode 'right)		; ... on the right
+(scroll-bar-mode -1)			; show no scrollbar...
+;(set-scroll-bar-mode 'right)		; ... on the right
 (setq scroll-margin 1			; do smooth scrolling, ...
       scroll-conservatively 100000	; ... the defaults ...
       scroll-up-aggressively 0.01	; ... are very ...
       scroll-down-aggressively 0.01)	; ... annoying
 
-(when (fboundp 'set-fringe-mode)	; emacs22+ 
+(when (fboundp 'set-fringe-mode)	; emacs22+
   (set-fringe-mode 2))			; space left of col1 in pixels
 
 (transient-mark-mode t)			; make the current 'selection' visible
@@ -44,19 +40,24 @@
       'x-cut-buffer-or-selection-value)	; ...other X clients
 
 
-					; Work with visible lines not with (wrapped,) logical lines 
-(visual-line-mode 0)    		; 1 for on, 0 for off.
+					; Work with visible lines not with (wrapped,) logical lines
+(visual-line-mode 1)    		; 1 for on, 0 for off.
 
 (setq fill-column 80)			; Break lines at colum x
 
 (set-face-attribute 'default nil :height 120) ; set default font size
+(setq-default show-trailing-whitespace 1) ; mark whitespace at the end of the line
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
+(savehist-mode 1) ; keep M-x History
+
+(setq set-mark-command-repeat-pop 1) ; cycle through marks with a single C-SPC, after the first C-u C-SPC was used.
+
 
 ;; show fill directoy in frame title
-;; http://stackoverflow.com/questions/3669511/the-function-to-show-current-files-full-path-in-mini-buffer
+
 (setq frame-title-format
       (list (format "%s %%S: %%j" (system-name))
             '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
@@ -64,7 +65,7 @@
 
 ;; AutoSave files in /tmp/
 ;; http://emacswiki.org/emacs/AutoSave
-;; Save all tempfiles in $TMPDIR/emacs$UID/                                                        
+;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (format "%s%s%s/" temporary-file-directory "emacs" (user-uid)))
 (setq backup-directory-alist `((".*" . ,emacs-tmp-dir)))
 (setq auto-save-file-name-transforms `((".*" ,emacs-tmp-dir t)))
@@ -73,7 +74,7 @@
 ;; auto-deploy
 ;; http://stackoverflow.com/questions/6368742/how-to-run-hook-depending-on-file-location
 (setq auto-deploy nil)
-(add-hook 'after-save-hook (lambda() 
+(add-hook 'after-save-hook (lambda()
                              (when auto-deploy
                                (message "Running auto-deploy")
                                (shell-command "/home/hartmann/es_workbench/deploy.sh")
@@ -97,7 +98,8 @@
 ;; function keys
 (global-set-key (kbd "<f11>") 'toggle-fullscreen)
 (global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
-(global-set-key (kbd "M-<f5>") 'revert-buffer)      ; revert buffer from file
+(global-set-key (kbd "<f5>") 'revert-buffer)        ; revert buffer from file
+(global-set-key (kbd "<f8>") 'deft)                 ; deft mode
 (global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
 (global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
 
@@ -113,8 +115,19 @@
 
 ;; MAGIT
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 ;; (global-unset-key (kbd "C-z"))				; disable suspend
+
+;; http://stackoverflow.com/questions/879011/is-it-possible-to-change-emacs-regexp-syntax?lq=1
+;; https://github.com/benma/visual-regexp-steroids.el
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch, also include the following lines:
+(define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
+(define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -154,6 +167,12 @@
 	  ("<down>"  . ignore             ))))
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
+;;
+;; Dired
+
+;; default dired parameters
+(setq dired-listing-switches "-tl --group-directories-first --no-group")
+
 ;; Omit hidden files in dired mode
 (require 'dired-x)
 (setq dired-omit-files
@@ -167,7 +186,6 @@
               dired-bibtex-unclean-extensions
               dired-texinfo-unclean-extensions))
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
-
 
 
 (defun toggle-fullscreen (&optional f)
@@ -184,11 +202,11 @@
 (epa-file-enable) ;; auto encrypt gpg files
 
 ;; JEDI PYTHON EDITOR
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)                      ; optional
-(setq jedi:complete-on-dot t)                 ; optional
+;(add-hook 'python-mode-hook 'jedi:setup)
+;(setq jedi:setup-keys t)                      ; optional
+;(setq jedi:complete-on-dot t)                 ; optional
 
-(add-hook 'python-mode-hook 'jedi:ac-setup)
+;(add-hook 'python-mode-hook 'jedi:ac-setup)
 
 ;; Markdown/R-files R.md
 (defun markdown-r-keys ()
@@ -199,6 +217,7 @@
 (add-hook 'markdown-mode-hook 'markdown-r-keys)
 
 ;; ORG MODE
+;; needs org-mode checked out in ~/git
 (add-to-list 'load-path "~/git/org-reveal")
 (add-to-list 'load-path "~/git/org-mode/lisp")
 (add-to-list 'load-path "~/git/org-mode/contrib/lisp" t)
@@ -217,6 +236,110 @@
 (tramp-cleanup-all-connections)
 (setq tramp-default-method "ssh")
 (defalias 'tc 'tramp-cleanup-all-connections)
+;; See http://bzg.fr/emacs-hide-mode-line.html
+(defvar-local hidden-mode-line-mode nil)
+(defvar-local hide-mode-line nil)
+
+;; DEFT MODE
+;; https://github.com/jrblevin/deft
+(require 'deft)
+(setq deft-extensions '("txt" "org" "md"))
+(setq deft-directory "~/git/notes")
+(setq deft-use-filename-as-title t)
+
+;; setup files ending in md to markdown mode
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http://bzg.fr/emacs-strip-tease.html
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Don't use messages that you don't read
+(setq initial-scratch-message "")
+(setq inhibit-startup-message t)
+;; Don't let Emacs hurt your ears/eyes
+(setq visible-bell 0)
+
+
+(define-minor-mode hidden-mode-line-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global nil
+  :variable hidden-mode-line-mode
+  :group 'editing-basics
+  (if hidden-mode-line-mode
+      (setq hide-mode-line mode-line-format
+            mode-line-format nil)
+    (setq mode-line-format hide-mode-line
+          hide-mode-line nil))
+  (force-mode-line-update)
+  ;; Apparently force-mode-line-update is not always enough to
+  ;; redisplay the mode-line
+  (redraw-display)
+  (when (and (called-interactively-p 'interactive)
+             hidden-mode-line-mode)
+    (run-with-idle-timer
+     0 nil 'message
+     (concat "Hidden Mode Line Mode enabled.  "
+             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
+
+;; Activate hidden-mode-line-mode
+;(hidden-mode-line-mode 1)
+
+;; If you want to hide the mode-line in all new buffers
+;(add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
+
+;; Alternatively, you can paint your mode-line in White but then
+;; you'll have to manually paint it in black again
+;; (custom-set-faces
+;;  '(mode-line-highlight ((t nil)))
+;;  '(mode-line ((t (:foreground "white" :background "white"))))
+;;  '(mode-line-inactive ((t (:background "white" :foreground "white")))))
+
+;; A small minor mode to use a big fringe
+(defvar bzg-big-fringe-mode nil)
+(define-minor-mode bzg-big-fringe-mode
+  "Minor mode to use big fringe in the current buffer."
+  :init-value nil
+  :global t
+  :variable bzg-big-fringe-mode
+  :group 'editing-basics
+  (if (not bzg-big-fringe-mode)
+      (set-fringe-style nil)
+    (set-fringe-mode
+     (/ (- (frame-pixel-width)
+           (* 100 (frame-char-width)))
+        2))))
+
+;; Now activate this global minor mode
+;; (bzg-big-fringe-mode 1)
+
+;; To activate the fringe by default and deactivate it when windows
+;; are split vertically, uncomment this:
+;; (add-hook 'window-configuration-change-hook
+;;           (lambda ()
+;;             (if (delq nil
+;;                       (let ((fw (frame-width)))
+;;                         (mapcar (lambda(w) (< (window-width w) fw))
+;;                                 (window-list))))
+;;                 (bzg-big-fringe-mode 0)
+;;               (bzg-big-fringe-mode 1))))
+
+;; Use a minimal cursor
+;; (setq default-cursor-type 'hbar)
+
+;; Get rid of the indicators in the fringe
+(mapcar (lambda(fb) (set-fringe-bitmap-face fb 'org-hide))
+        fringe-bitmaps)
+
+;;
+;; Projectile configuration
+;; https://github.com/bbatsov/projectile
+;;
+
+(projectile-global-mode) ; always run projectil
+(setq projectile-enable-caching t) ; cache project files
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS CUSTOMIZATION
@@ -227,15 +350,21 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
  '(csv-separators (quote ("	" "	")))
- '(custom-enabled-themes (quote (tango)))
  '(inhibit-startup-screen t)
  '(lua-indent-level 2)
- '(markdown-css-path "http://kevinburke.bitbucket.org/markdowncss/markdown.css")
+ '(markdown-css-path "http://jasonm23.github.io/markdown-css-themes/foghorn.css")
  '(markdown-xhtml-header-content "<style> p { text-align:
  justify; } </style>")
- '(safe-local-variable-values (quote ((auto-deploy . t))))
+ '(safe-local-variable-values
+   (quote
+    ((eval progn
+           (require
+            (quote projectile))
+           (puthash
+            (projectile-project-root)
+            "./deploy.sh" projectile-compilation-cmd-map))
+     (auto-deploy . t))))
  '(todotxt-file "/home/hartmann/Dropbox/todo/todo.txt" nil (todotxt)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

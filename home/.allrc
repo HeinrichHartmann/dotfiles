@@ -1,111 +1,66 @@
-#export PATH=~/Programs/anaconda/bin:$PATH
+#
+# Environment
+#
 
-alias open="gnome-open"
-alias o="gnome-open"
+export PATH="/home/hartmann/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+# export MANPATH="/usr/local/man:$MANPATH"
 
-alias emacs='emacsclient -c -a ""'
-alias e='emacsclient -c -a "" -nw'
+EDITOR=/usr/bin/editor # sysem default mini emacs mg
+SUDO_EDITOR=/usr/bin/editor
 
-PYROOT=~/Programs/anaconda/bin
-alias pylab="$PYROOT/ipython qtconsole"
-alias pynote="$PYROOT/ipython notebook"
-# --matplotlib inline: show graphics inline
-# --script: store py along with ipy files
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-alias emacs='emacsclient -c -a ""'
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 #
-# Timestamp
+# General
 #
-alias date-iso='date +"%FT%T%Z"' # time stamp. Use with -u for UTC time
-alias today='date +"%F"' # date stamp
-alias uts='date +%s' # unix time stamp
+alias ls="ls --color=tty --group-directories-first"
+alias l='ls -lrtGF'
+
+# -a "" runs emacs --daemon and tries to connect
+alias emacs='emacsclient --create-frame -a "" --tty'
+alias xemacs='emacsclient --create-frame -a ""'
+
+alias e=eval $EDITOR
+alias xe=xemacs
+alias x=emacs -F "'(fullscreen . fullboth)" -e "(find-file \"~/\")"
+
+alias open="xdg-open"
+
+# sudo edit
+function se() {
+    FILE=$1
+    [[ $# -ne 1 || ! -e $FILE ]] && {
+        echo "Usage: $0 <filename>"
+        return 1 # FAIL
+    }
+    TMP_FILE=$(mktemp)
+    cp "$FILE" "$TMP_FILE"
+    sudoedit "$FILE"
+    printf "Diff:\n"
+    diff "$FILE" "$TMP_FILE"
+    return 0
+}
+alias se-hosts='se /etc/hosts'
+
+function sh-reload() { source ~/.allrc }
 
 # Password generator
-pwdgen() {
-	local l=$1
+password-gen() {
+	local l=${1:-10}
     [ "$l" == "" ] && l=16
     tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
 }
 
 
-#
-# APT
-#
-function apt-history(){
-      case "$1" in
-        install)
-              cat /var/log/dpkg.log | grep 'install ' 
-              ;;
-        upgrade|remove)
-              cat /var/log/dpkg.log | grep $1
-              ;;
-        rollback)
-              cat /var/log/dpkg.log | grep upgrade | \
-                  grep "$2" -A10000000 | \
-                  grep "$3" -B10000000 | \
-                  awk '{print $4"="$5}'
-              ;;
-        *)
-              cat /var/log/dpkg.log
-              ;;
-      esac
-}
-
-function apt-tail(){
-    cat /var/log/dpkg.log | grep 'install ' | tail -n $1
-}
-
-alias install="sudo apt-get install"
-
-#
-# Todo.txt
-#
-
-alias td="$HOME/git/todo.txt-cli/todo.sh -d $HOME/git/todo.txt-cli/todo.cfg"
-alias etd="emacs -nw $HOME/Dropbox/todo/todo.txt"
-
-#
-# Antlr
-#
-export CLASSPATH=".:/usr/local/lib/antlr-4.2-complete.jar:$CLASSPATH"
-alias antlr4='java -jar /usr/local/lib/antlr-4.4-complete.jar'
-alias grun='java org.antlr.v4.runtime.misc.TestRig'
-
-
-#
-# scanner pdf handling
-#
-
-DOC_ROOT=/home/hartmann/Documents
-
-function scan_collate {
-    pdftk A="$1" B="$2" shuffle A Bend-1S output "$3"
-}
-
-alias scan_merge="pdfunite"
-
-function scan_get {
-    A=`newest ~/scanner/`
-    B="$DOC_ROOT/`date +%F`_$1.pdf"
-    mv "$A" "$B"
-    echo "Moved $A to $B"
-}
-
-function archive {
-    B="$DOC_ROOT/`date +%F`_$1"
-    cp "$1" "$B"
-    echo "Archived $1 to $B"
-    ls -l "$B"
-}
-
-function stamp {
-    mv "$1" "`date +%F`_$1"
-}
-
-#
-# Safe filename handling
-#
-# Those have problems with ordering of command line arguments. "Path" must precede expressions.
-#alias find0="find -print0"
-#alias xargs0="xargs -0"
+if [ -d ~/.shell_functions ]; then
+    for file in ~/.shell_functions/*.sh; do
+        source "$file"
+    done
+fi
