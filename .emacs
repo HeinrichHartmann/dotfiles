@@ -2,21 +2,26 @@
 ;; Load External Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'cl) ;; common lisp
+
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 (load "helpers")          ; convenicence functions
-(load "package-settings") ; el-get settings
+(load "setup-package")    ; setup package manager
+(load "setup-el-get")     ; setup el-get
 (load "tmux")
 (load "font-settings")	  ; default fonts and font cycle script
 (load "latex-settings")	  ; add hooks for latex
 
 ;; install default set of packages
-(ensure-package-installed
- 'magit
+(package-ensure-installed
  'jedi
  'markdown-mode
  'multiple-cursors
- 'el-get
+ 'magit
+)
+
+(el-get-ensure-installed
  'visual-regexp-steroids
 )
 
