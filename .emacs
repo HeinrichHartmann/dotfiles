@@ -25,8 +25,6 @@
  'visual-regexp-steroids
 )
 
-(package-initialize)
-
 (require 'multiple-cursors)
 (require 'visual-regexp-steroids)
 
