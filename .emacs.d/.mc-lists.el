@@ -3,12 +3,13 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-	eval-print-last-sexp
-	indent-for-tab-command
-	kill-region
-	))
+        beginning-of-buffer
+        eval-print-last-sexp
+        indent-for-tab-command
+        kill-region
+        ))
 
 (setq mc/cmds-to-run-once
       '(
-	markdown-exdent-or-delete
-	))
+        markdown-exdent-or-delete
+        ))

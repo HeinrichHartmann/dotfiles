@@ -1,6 +1,6 @@
 # APT
 #
-function apt-history(){
+function pkg-history(){
       case "$1" in
         install)
               cat /var/log/dpkg.log | grep 'install '
@@ -20,27 +20,27 @@ function apt-history(){
       esac
 }
 
-function apt-tail(){
+function pkg-tail(){
     cat /var/log/dpkg.log | grep 'install ' | tail -n $1
 }
 
-alias apt-version="apt-cache policy"
+alias pkg-version="apt-cache policy"
 
 # get package index from repositories
-alias apt-update="sudo apt-get update" # update package repository
+alias pkg-update="sudo apt-get update" # update package repository
 
 # inspect local package indices
-alias apt-search="apt-cache search" # search for packages matching a keyword
-alias apt-list-all="apt-cache pkgnames" # list all packages availabe from repositories
-alias apt-info="apt-cache show" # print information about a package
+alias pkg-search="apt-cache search" # search for packages matching a keyword
+alias pkg-list-all="apt-cache pkgnames" # list all packages availabe from repositories
+alias pkg-info="apt-cache show" # print information about a package
 
 # install package
-alias apt-install="sudo apt-get install"
+alias pkg-install="sudo apt-get install"
 
 # inspect loacl packages
-alias apt-list="dpkg --get-selections | cut -f 1" # list all installed packages
-alias apt-list-installed="aptitude search '~i!~M'" # list all explicity installed packages
-alias apt-contents="dpkg -L" # show contensts of an installed package package
+alias pkg-list="dpkg --get-selections | cut -f 1" # list all installed packages
+alias pkg-list-installed="aptitude search '~i!~M'" # list all explicity installed packages
+alias pkg-contents="dpkg -L" # show contensts of an installed package package
 
 
 

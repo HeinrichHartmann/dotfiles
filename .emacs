@@ -1,12 +1,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load External Settings
+;; Load External Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
+(load "helpers")          ; convenicence functions
 (load "package-settings") ; el-get settings
+(load "tmux")
 (load "font-settings")	  ; default fonts and font cycle script
 (load "latex-settings")	  ; add hooks for latex
+
+;; install default set of packages
+(ensure-package-installed
+ 'magit
+ 'jedi
+ 'markdown-mode
+ 'multiple-cursors
+ 'el-get
+ 'visual-regexp-steroids
+)
+
+(package-initialize)
 
 (require 'multiple-cursors)
 (require 'visual-regexp-steroids)
@@ -71,36 +85,42 @@
 (setq auto-save-file-name-transforms `((".*" ,emacs-tmp-dir t)))
 (setq auto-save-list-file-prefix emacs-tmp-dir)
 
-;; auto-deploy
-;; http://stackoverflow.com/questions/6368742/how-to-run-hook-depending-on-file-location
-(setq auto-deploy nil)
-(add-hook 'after-save-hook (lambda()
-                             (when auto-deploy
-                               (message "Running auto-deploy")
-                               (shell-command "/home/hartmann/es_workbench/deploy.sh")
-                               )
-                             )
-)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
-(global-set-key (kbd "s-o") 'other-window)              ; quick window change (s=WinKey)
+
 (global-set-key (kbd "C-x $") 'ispell-buffer)		; spell check
-(global-set-key (kbd "C-x !") 'eshell)	         	; eshell
+(global-set-key (kbd "C-x !") 'hell)	         	; eshell
 (global-set-key (kbd "C-x a") 'align-regexp)       	; align
 (global-set-key (kbd "C-x c") 'calendar)		; show calendar
 (global-set-key (kbd "C-x t") 'toggle-truncate-lines)	; warp long lines
 (global-set-key (kbd "C-\\") 'dabbrev-expand)		; auto complete? (=M-/)
 
+(global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+
+;; don't use arrow keys for cursor movement
+(global-set-key (kbd "<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "<down>") 'shrink-window)
+(global-set-key (kbd "<up>") 'enlarge-window)
+
+
+;;
+(global-set-key (kbd "C-<tab>") 'next-buffer)
+(global-set-key (kbd "C-S-<tab>") 'previous-buffer)
+
+
 ;; function keys
+
 (global-set-key (kbd "<f11>") 'toggle-fullscreen)
 (global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
 (global-set-key (kbd "<f5>") 'revert-buffer)        ; revert buffer from file
 (global-set-key (kbd "<f8>") 'deft)                 ; deft mode
 (global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
+
 (global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
 
 ;; Multiple cursurs default key bindings
@@ -110,8 +130,8 @@
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 ;; Tabbar mode navigation
-(global-set-key (kbd "M-<left>") 'tabbar-backward-tab)
-(global-set-key (kbd "M-<right>") 'tabbar-forward-tab)
+;; (global-set-key (kbd "M-<left>") 'tabbar-backward-tab)
+;; (global-set-key (kbd "M-<right>") 'tabbar-forward-tab)
 
 ;; MAGIT
 (global-set-key (kbd "C-x g") 'magit-status)
@@ -172,6 +192,10 @@
 
 ;; default dired parameters
 (setq dired-listing-switches "-tl --group-directories-first --no-group")
+(add-hook 'dired-mode-hook (lambda ()
+                             (local-set-key (kbd "C-c C-c") 'wdired-change-to-wdired-mode)
+                             ))
+
 
 ;; Omit hidden files in dired mode
 (require 'dired-x)
@@ -361,10 +385,24 @@
     ((eval progn
            (require
             (quote projectile))
-           (puthash
-            (projectile-project-root)
-            "./deploy.sh" projectile-compilation-cmd-map))
-     (auto-deploy . t))))
+           (defun snowth-deploy nil
+             (interactive)
+             (message
+              (concat "Running deploying on " project-root))
+             (shell-command
+              (concat project-root "deploy.sh")))
+           (defun snowth-test nil
+             (interactive)
+             (message
+              (concat "Running test on " project-root))
+             (shell-command
+              (concat project-root "lua/test/runTest.sh")))
+           (local-set-key
+            (kbd "C-c C-c")
+            (quote snowth-test))
+           (local-set-key
+            (kbd "C-c C-d")
+            (quote snowth-deploy))))))
  '(todotxt-file "/home/hartmann/Dropbox/todo/todo.txt" nil (todotxt)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -377,4 +415,6 @@
  '(font-latex-sectioning-3-face ((t (:inherit font-latex-sectioning-4-face))) t)
  '(font-latex-sectioning-4-face ((t (:inherit font-latex-sectioning-5-face))) t)
  '(font-latex-subscript-face ((t nil)) t)
- '(font-latex-superscript-face ((t nil)) t))
+ '(font-latex-superscript-face ((t nil)) t)
+ '(magit-diff-added ((t (:background "black" :foreground "#ddffdd"))))
+ '(magit-diff-added-highlight ((t (:background "blue" :foreground "#cceecc")))))

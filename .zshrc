@@ -58,4 +58,3 @@ source $ZSH/oh-my-zsh.sh
 PROMPT_EOL_MARK="<EOL>"
 
 source ~/.allrc
-

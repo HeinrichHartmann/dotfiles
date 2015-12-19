@@ -30,12 +30,6 @@
    packages)
   )
 
-
-(ensure-package-installed 'magit 'jedi 'markdown-mode 'multiple-cursors)
-
-;; activate installed packages
-(package-initialize)
-
 ;; AUTO INSTALL el-get
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer

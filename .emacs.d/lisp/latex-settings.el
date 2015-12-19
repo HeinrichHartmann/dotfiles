@@ -38,6 +38,7 @@
     )
   )
 
+
 (defun set-visual-wrap-column (new-wrap-column &optional buffer)
   "Force visual line wrap at NEW-WRAP-COLUMN in BUFFER (defaults
     to current buffer) by setting the right-hand margin on every
