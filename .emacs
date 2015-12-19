@@ -19,10 +19,11 @@
  'markdown-mode
  'multiple-cursors
  'magit
+ 'visual-regexp-steroids
 )
 
 (el-get-ensure-installed
- 'visual-regexp-steroids
+ 
 )
 
 (require 'multiple-cursors)
