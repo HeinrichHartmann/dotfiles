@@ -12,6 +12,8 @@
 (load "tmux")
 (load "font-settings")	  ; default fonts and font cycle script
 (load "latex-settings")	  ; add hooks for latex
+(load "orgmode-settings")	  ; default fonts and font cycle script
+(load "emacs-strip-tease")
 
 ;; install default set of packages
 (package-ensure-installed
@@ -20,14 +22,25 @@
  'multiple-cursors
  'magit
  'visual-regexp-steroids
-)
+ 'tabbar
+ 'deft
+ 'projectile
+ 'todotxt
+ )
 
 (el-get-ensure-installed
- 
-)
+ ;;
+ )
 
 (require 'multiple-cursors)
+(require 'tabbar)
 (require 'visual-regexp-steroids)
+(require 'deft)
+(require 'tramp)
+(require 'epa-file)
+(require 'dired-x)
+(require 'projectile)
+(require 'todotxt)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Settings
@@ -111,18 +124,15 @@
 (global-set-key (kbd "<down>") 'shrink-window)
 (global-set-key (kbd "<up>") 'enlarge-window)
 
-
-;;
-(global-set-key (kbd "C-<tab>") 'next-buffer)
-(global-set-key (kbd "C-S-<tab>") 'previous-buffer)
-
+;; Cycle through bufers
+(global-set-key (kbd "<M-left>") 'next-buffer)
+(global-set-key (kbd "<M-right>") 'previous-buffer)
 
 ;; function keys
 
 (global-set-key (kbd "<f11>") 'toggle-fullscreen)
 (global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
 (global-set-key (kbd "<f5>") 'revert-buffer)        ; revert buffer from file
-(global-set-key (kbd "<f8>") 'deft)                 ; deft mode
 (global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
 
 (global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
@@ -132,10 +142,6 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-
-;; Tabbar mode navigation
-;; (global-set-key (kbd "M-<left>") 'tabbar-backward-tab)
-;; (global-set-key (kbd "M-<right>") 'tabbar-forward-tab)
 
 ;; MAGIT
 (global-set-key (kbd "C-x g") 'magit-status)
@@ -202,7 +208,6 @@
 
 
 ;; Omit hidden files in dired mode
-(require 'dired-x)
 (setq dired-omit-files
       (rx (or (seq bol (? ".") "#")         ;; emacs autosave files
               (seq bol "." (not (any "."))) ;; dot-files
@@ -226,7 +231,6 @@
 				  'fullboth)))))
 
 ;; Encrytion settings
-(require 'epa-file)
 (epa-file-enable) ;; auto encrypt gpg files
 
 ;; JEDI PYTHON EDITOR
@@ -244,23 +248,11 @@
   )
 (add-hook 'markdown-mode-hook 'markdown-r-keys)
 
-;; ORG MODE
-;; needs org-mode checked out in ~/git
-(add-to-list 'load-path "~/git/org-reveal")
-(add-to-list 'load-path "~/git/org-mode/lisp")
-(add-to-list 'load-path "~/git/org-mode/contrib/lisp" t)
-(require 'ox-beamer)
-(require 'ox-md)
-(require 'ox-deck)
-(require 'ox-reveal)
-(require 'ox-taskjuggler)
-
 
 ;; DGDB MODE
 (setq gdb-show-main 1)
 
 ;; TRAMP MODE
-(require 'tramp)
 (tramp-cleanup-all-connections)
 (setq tramp-default-method "ssh")
 (defalias 'tc 'tramp-cleanup-all-connections)
@@ -270,7 +262,6 @@
 
 ;; DEFT MODE
 ;; https://github.com/jrblevin/deft
-(require 'deft)
 (setq deft-extensions '("txt" "org" "md"))
 (setq deft-directory "~/git/notes")
 (setq deft-use-filename-as-title t)
@@ -278,87 +269,6 @@
 ;; setup files ending in md to markdown mode
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; http://bzg.fr/emacs-strip-tease.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Don't use messages that you don't read
-(setq initial-scratch-message "")
-(setq inhibit-startup-message t)
-;; Don't let Emacs hurt your ears/eyes
-(setq visible-bell 0)
-
-
-(define-minor-mode hidden-mode-line-mode
-  "Minor mode to hide the mode-line in the current buffer."
-  :init-value nil
-  :global nil
-  :variable hidden-mode-line-mode
-  :group 'editing-basics
-  (if hidden-mode-line-mode
-      (setq hide-mode-line mode-line-format
-            mode-line-format nil)
-    (setq mode-line-format hide-mode-line
-          hide-mode-line nil))
-  (force-mode-line-update)
-  ;; Apparently force-mode-line-update is not always enough to
-  ;; redisplay the mode-line
-  (redraw-display)
-  (when (and (called-interactively-p 'interactive)
-             hidden-mode-line-mode)
-    (run-with-idle-timer
-     0 nil 'message
-     (concat "Hidden Mode Line Mode enabled.  "
-             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
-
-;; Activate hidden-mode-line-mode
-;(hidden-mode-line-mode 1)
-
-;; If you want to hide the mode-line in all new buffers
-;(add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
-
-;; Alternatively, you can paint your mode-line in White but then
-;; you'll have to manually paint it in black again
-;; (custom-set-faces
-;;  '(mode-line-highlight ((t nil)))
-;;  '(mode-line ((t (:foreground "white" :background "white"))))
-;;  '(mode-line-inactive ((t (:background "white" :foreground "white")))))
-
-;; A small minor mode to use a big fringe
-(defvar bzg-big-fringe-mode nil)
-(define-minor-mode bzg-big-fringe-mode
-  "Minor mode to use big fringe in the current buffer."
-  :init-value nil
-  :global t
-  :variable bzg-big-fringe-mode
-  :group 'editing-basics
-  (if (not bzg-big-fringe-mode)
-      (set-fringe-style nil)
-    (set-fringe-mode
-     (/ (- (frame-pixel-width)
-           (* 100 (frame-char-width)))
-        2))))
-
-;; Now activate this global minor mode
-;; (bzg-big-fringe-mode 1)
-
-;; To activate the fringe by default and deactivate it when windows
-;; are split vertically, uncomment this:
-;; (add-hook 'window-configuration-change-hook
-;;           (lambda ()
-;;             (if (delq nil
-;;                       (let ((fw (frame-width)))
-;;                         (mapcar (lambda(w) (< (window-width w) fw))
-;;                                 (window-list))))
-;;                 (bzg-big-fringe-mode 0)
-;;               (bzg-big-fringe-mode 1))))
-
-;; Use a minimal cursor
-;; (setq default-cursor-type 'hbar)
-
-;; Get rid of the indicators in the fringe
-(mapcar (lambda(fb) (set-fringe-bitmap-face fb 'org-hide))
-        fringe-bitmaps)
 
 ;;
 ;; Projectile configuration
