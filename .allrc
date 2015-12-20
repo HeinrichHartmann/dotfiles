@@ -35,6 +35,7 @@ alias egit=emacs -e "(magit-status)"
 alias open="xdg-open"
 
 alias println='printf "%s\n"'
+bashman () { man bash | less -p "^[[:space:]]*$1 "; }
 
 # sudo edit
 function se() {

@@ -45,54 +45,50 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq-default major-mode 'text-mode) ; edit files in text mode per default
+(setq-default major-mode 'text-mode)          ; edit files in text mode per default
+(menu-bar-mode -1)                            ; show the menu...
+(tool-bar-mode -1)                            ; ... but not the the toolbar
+(ruler-mode -1)                               ; kein Lineal
+(tabbar-mode -1)                              ; Tabbar mode
+(icomplete-mode t)                            ; Show auto completin in minibuffer menus
+(setq icomplete-prospects-height 1)           ; ...only one line
+(scroll-bar-mode -1)                          ; show no scrollbar...
+(scroll-bar-mode 'right)                      ; ... on the right
+(setq scroll-margin 1                         ; do smooth scrolling, ...
+      scroll-conservatively 100000            ; ... the defaults ...
+      scroll-up-aggressively 0.01             ; ... are very ...
+      scroll-down-aggressively 0.01)          ; ... annoying
+(when (fboundp 'set-fringe-mode)              ; emacs22+
+  (set-fringe-mode 2))                        ; space left of col1 in pixels
+(transient-mark-mode t)                       ; make the current 'selection' visible
+(delete-selection-mode -1)                    ; do not delete the selection with a keypress
+(setq x-select-enable-clipboard t             ; copy-paste should work ...
+      interprogram-paste-function             ; ...with...
+      'x-cut-buffer-or-selection-value)       ; ...other X clients
 
-(menu-bar-mode -1)			; show the menu...
-(tool-bar-mode -1)			; ... but not the the toolbar
-(ruler-mode -1)				; kein Lineal
-(tabbar-mode -1)				; Tabbar mode
-(icomplete-mode t)			; Show auto completin in minibuffer menus
-(setq icomplete-prospects-height 1)	; ...only one line
-
-(scroll-bar-mode -1)			; show no scrollbar...
-;(set-scroll-bar-mode 'right)		; ... on the right
-(setq scroll-margin 1			; do smooth scrolling, ...
-      scroll-conservatively 100000	; ... the defaults ...
-      scroll-up-aggressively 0.01	; ... are very ...
-      scroll-down-aggressively 0.01)	; ... annoying
-
-(when (fboundp 'set-fringe-mode)	; emacs22+
-  (set-fringe-mode 2))			; space left of col1 in pixels
-
-(transient-mark-mode t)			; make the current 'selection' visible
-(delete-selection-mode -1)		; do not delete the selection with a keypress
-(setq x-select-enable-clipboard t	; copy-paste should work ...
-      interprogram-paste-function	; ...with...
-      'x-cut-buffer-or-selection-value)	; ...other X clients
-
-
-					; Work with visible lines not with (wrapped,) logical lines
-(visual-line-mode 1)    		; 1 for on, 0 for off.
-
-(setq fill-column 80)			; Break lines at colum x
-
+;; Work with visible lines not with (wrapped,) logical lines
+(visual-line-mode 1)                          ; 1 for on, 0 for off.
+(setq fill-column 80)                         ; Break lines at colum x
 (set-face-attribute 'default nil :height 120) ; set default font size
-(setq-default show-trailing-whitespace 1) ; mark whitespace at the end of the line
+(setq-default show-trailing-whitespace 1)     ; mark whitespace at the end of the line
+(defun toggle-show-trailing-whitespace ()
+  (interactive)
+  (if show-trailing-whitespace
+      (setq show-trailing-whitespace nil)
+    (setq show-trailing-whitespace t)
+    ))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
-(savehist-mode 1) ; keep M-x History
+(savehist-mode 1)                             ; keep M-x History
 
-(setq set-mark-command-repeat-pop 1) ; cycle through marks with a single C-SPC, after the first C-u C-SPC was used.
+(setq set-mark-command-repeat-pop 1)          ; cycle through marks with a single C-SPC, after the first C-u C-SPC was used.
 
-
-;; show fill directoy in frame title
-
+;; show full directoy in frame title
 (setq frame-title-format
       (list (format "%s %%S: %%j" (system-name))
             '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
-
 
 ;; AutoSave files in /tmp/
 ;; http://emacswiki.org/emacs/AutoSave
@@ -117,6 +113,9 @@
 (global-set-key (kbd "C-\\") 'dabbrev-expand)		; auto complete? (=M-/)
 
 (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+(global-set-key (kbd "C-x w") 'toggle-show-trailing-whitespace)
+
+(global-set-key (kbd "C-x <return>") '(lambda () (ansi-term "/usr/bin/zsh"))
 
 ;; don't use arrow keys for cursor movement
 (global-set-key (kbd "<left>") 'shrink-window-horizontally)
@@ -130,12 +129,11 @@
 
 ;; function keys
 
-(global-set-key (kbd "<f11>") 'toggle-fullscreen)
-(global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
 (global-set-key (kbd "<f5>") 'revert-buffer)        ; revert buffer from file
-(global-set-key (kbd "M-<f11>") 'menu-bar-mode)		; toggle menubar
-
-(global-set-key (kbd "M-<f12>") 'tabbar-mode)		; toggle tabbar
+(global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
+(global-set-key (kbd "M-<f10>") 'tabbar-mode)		; toggle tabbar
+(global-set-key (kbd "C-<f10>") 'menu-bar-mode)		; toggle menubar
+(global-set-key (kbd "<f11>") 'toggle-fullscreen)
 
 ;; Multiple cursurs default key bindings
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
@@ -332,3 +330,4 @@
  '(font-latex-superscript-face ((t nil)) t)
  '(magit-diff-added ((t (:background "black" :foreground "#ddffdd"))))
  '(magit-diff-added-highlight ((t (:background "blue" :foreground "#cceecc")))))
+
