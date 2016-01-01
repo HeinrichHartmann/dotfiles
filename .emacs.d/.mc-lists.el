@@ -4,9 +4,15 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-buffer
+        beginning-of-visual-line
+        electric-newline-and-maybe-indent
+        enlarge-window
+        enlarge-window-horizontally
         eval-print-last-sexp
         indent-for-tab-command
         kill-region
+        shrink-window
+        shrink-window-horizontally
         ))
 
 (setq mc/cmds-to-run-once

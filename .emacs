@@ -14,6 +14,8 @@
 (load "latex-settings")	  ; add hooks for latex
 (load "orgmode-settings")	  ; default fonts and font cycle script
 (load "emacs-strip-tease")
+(load "jedi-settings")
+(load "tramp-settings")
 
 ;; install default set of packages
 (package-ensure-installed
@@ -23,24 +25,24 @@
  'magit
  'visual-regexp-steroids
  'tabbar
- 'deft
  'projectile
- 'todotxt
+ 'page-break-lines
  )
 
 (el-get-ensure-installed
  ;;
- )
+)
 
 (require 'multiple-cursors)
 (require 'tabbar)
 (require 'visual-regexp-steroids)
-(require 'deft)
-(require 'tramp)
 (require 'epa-file)
 (require 'dired-x)
-(require 'projectile)
-(require 'todotxt)
+(require 'page-break-lines)
+;;(require 'projectile)
+
+;; Render page-break control character (^L) as horizontal line
+(global-page-break-lines-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Settings
@@ -103,43 +105,39 @@
 ;; Keyboard Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(windmove-default-keybindings)				; switch windows using <s-{arrow keys}>
+(global-set-key (kbd "M-n") 'forward-paragraph)
+(global-set-key (kbd "M-p") 'backward-paragraph)
 
-(global-set-key (kbd "C-x $") 'ispell-buffer)		; spell check
-(global-set-key (kbd "C-x !") 'hell)	         	; eshell
-(global-set-key (kbd "C-x a") 'align-regexp)       	; align
-(global-set-key (kbd "C-x c") 'calendar)		; show calendar
-(global-set-key (kbd "C-x t") 'toggle-truncate-lines)	; warp long lines
-(global-set-key (kbd "C-\\") 'dabbrev-expand)		; auto complete? (=M-/)
-
-(global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
-(global-set-key (kbd "C-x w") 'toggle-show-trailing-whitespace)
-
-(global-set-key (kbd "C-x <return>") '(lambda () (ansi-term "/usr/bin/zsh"))
-
-;; don't use arrow keys for cursor movement
+;; don't use arrow keys for cursor movement, but for resizing windows
 (global-set-key (kbd "<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "<down>") 'shrink-window)
 (global-set-key (kbd "<up>") 'enlarge-window)
 
-;; Cycle through bufers
+;; switch windows using <s-{arrow keys}>
+(windmove-default-keybindings)
+
+;; Cycle through bufers with M-{arrow keys}
 (global-set-key (kbd "<M-left>") 'next-buffer)
 (global-set-key (kbd "<M-right>") 'previous-buffer)
 
-;; function keys
+(global-set-key (kbd "C-x !") 'shell)                 ; a shell
+(global-set-key (kbd "C-x $") 'ispell-buffer)         ; spell check
+(global-set-key (kbd "C-x c") 'calendar)              ; show calendar
+(global-set-key (kbd "C-\\") 'dabbrev-expand)         ; auto complete? (=M-/)
 
+(global-set-key (kbd "C-x w") 'toggle-show-trailing-whitespace)
+(global-set-key (kbd "C-x t") 'toggle-truncate-lines) ; warp long lines
+(global-set-key (kbd "C-x a") 'align-regexp)          ; align
+(global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+
+;; FUNCTION KEYS
 (global-set-key (kbd "<f5>") 'revert-buffer)        ; revert buffer from file
-(global-set-key (kbd "<f9>") 'cycle-font)	        ; cf. emacs.d/font-settings.el
+(global-set-key (kbd "<f9>") 'cycle-font)	        ; cf . emacs.d/font-settings.el
+(global-set-key (kbd "C-<f10>") 'menu-bar-mode)		; toggle menubar; f10 to access menubar.
 (global-set-key (kbd "M-<f10>") 'tabbar-mode)		; toggle tabbar
-(global-set-key (kbd "C-<f10>") 'menu-bar-mode)		; toggle menubar
-(global-set-key (kbd "<f11>") 'toggle-fullscreen)
-
-;; Multiple cursurs default key bindings
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "<f11>") 'toggle-fullscreen)   ; toggle fullscreen
+(global-set-key (kbd "C-<f11>") 'zen-mode)          ; big-fringes, in center (gtk-only)
 
 ;; MAGIT
 (global-set-key (kbd "C-x g") 'magit-status)
@@ -147,15 +145,25 @@
 
 ;; (global-unset-key (kbd "C-z"))				; disable suspend
 
+;; VISUAL REGEXP STEROIDS
 ;; http://stackoverflow.com/questions/879011/is-it-possible-to-change-emacs-regexp-syntax?lq=1
 ;; https://github.com/benma/visual-regexp-steroids.el
 (define-key global-map (kbd "C-c r") 'vr/replace)
 (define-key global-map (kbd "C-c q") 'vr/query-replace)
-;; if you use multiple-cursors, this is for you:
-(define-key global-map (kbd "C-c m") 'vr/mc-mark)
 ;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch, also include the following lines:
 (define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
 (define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
+
+;; convert selection to multiple cursors
+(define-key global-map (kbd "C-S-q") 'vr/mc-mark)
+
+;; MULTIPLE CURSORS
+;; https://github.com/magnars/multiple-cursors.el
+(global-set-key (kbd "C-S-n") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-S-p") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases
@@ -195,15 +203,10 @@
 	  ("<down>"  . ignore             ))))
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
-;;
-;; Dired
 
+;; DIRED
 ;; default dired parameters
 (setq dired-listing-switches "-tl --group-directories-first --no-group")
-(add-hook 'dired-mode-hook (lambda ()
-                             (local-set-key (kbd "C-c C-c") 'wdired-change-to-wdired-mode)
-                             ))
-
 
 ;; Omit hidden files in dired mode
 (setq dired-omit-files
@@ -216,7 +219,13 @@
       (append dired-latex-unclean-extensions
               dired-bibtex-unclean-extensions
               dired-texinfo-unclean-extensions))
-(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (dired-omit-mode 1)
+            (local-set-key (kbd "C-c C-c") 'wdired-change-to-wdired-mode)
+            (local-set-key (kbd "u") 'dired-up-directory)
+            ))
 
 
 (defun toggle-fullscreen (&optional f)
@@ -231,51 +240,86 @@
 ;; Encrytion settings
 (epa-file-enable) ;; auto encrypt gpg files
 
-;; JEDI PYTHON EDITOR
-;(add-hook 'python-mode-hook 'jedi:setup)
-;(setq jedi:setup-keys t)                      ; optional
-;(setq jedi:complete-on-dot t)                 ; optional
-
-;(add-hook 'python-mode-hook 'jedi:ac-setup)
-
-;; Markdown/R-files R.md
-(defun markdown-r-keys ()
-  "my keys for `Markdown/R mode'."
-  (interactive)
-  (local-set-key (kbd "C-c C-e") 'ess-eval-paragraph)
-  )
-(add-hook 'markdown-mode-hook 'markdown-r-keys)
-
-
 ;; DGDB MODE
 (setq gdb-show-main 1)
 
-;; TRAMP MODE
-(tramp-cleanup-all-connections)
-(setq tramp-default-method "ssh")
-(defalias 'tc 'tramp-cleanup-all-connections)
 ;; See http://bzg.fr/emacs-hide-mode-line.html
 (defvar-local hidden-mode-line-mode nil)
 (defvar-local hide-mode-line nil)
 
-;; DEFT MODE
-;; https://github.com/jrblevin/deft
-(setq deft-extensions '("txt" "org" "md"))
-(setq deft-directory "~/git/notes")
-(setq deft-use-filename-as-title t)
-
-;; setup files ending in md to markdown mode
+;; MARKDOWN MODE
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(eval-after-load 'markdown-mode
+    '(progn
+       (define-key markdown-mode-map (kbd "M-n") nil)
+       (define-key markdown-mode-map (kbd "M-p") nil)
+       ))
 
-
-;;
 ;; Projectile configuration
 ;; https://github.com/bbatsov/projectile
 ;;
+;(projectile-global-mode)                ; always run projectil
+;(setq projectile-enable-caching t)      ; cache project files
 
-(projectile-global-mode) ; always run projectil
-(setq projectile-enable-caching t) ; cache project files
+;; MARKING
+;; cf. https://www.masteringemacs.org/article/fixing-mark-commands-transient-mark-mode
+(defun push-mark-no-activate ()
+  "Pushes `point' to `mark-ring' and does not activate the region
+   Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
+  (interactive)
+  (push-mark (point) t nil)
+  (message "Pushed mark to ring"))
 
+(global-set-key (kbd "C-`") 'push-mark-no-activate)
+
+(defun jump-to-mark ()
+  "Jumps to the local mark, respecting the `mark-ring' order.
+  This is the same as using \\[set-mark-command] with the prefix argument."
+  (interactive)
+  (set-mark-command 1))
+(global-set-key (kbd "M-`") 'jump-to-mark)
+
+(defun exchange-point-and-mark-no-activate ()
+  "Identical to \\[exchange-point-and-mark] but will not activate the region."
+  (interactive)
+  (exchange-point-and-mark)
+  (deactivate-mark nil))
+(define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
+
+(require 'show-marks)
+(global-set-key (kbd "<C-right>") 'forward-mark)
+(global-set-key (kbd "<C-left>") 'backward-mark)
+(global-set-key (kbd "<C-down>") 'show-marks)
+
+;; TODO TXT MODE
+
+;; (require 'todotxt)
+;; (define-key todotxt-mode-map (kbd "d") 'todotxt-complete-toggle)
+;; (defun todo ()
+;;   (interactive)
+;;   (let ((buffer-name (find-file-noselect "~/Dropbox/todo/todo.txt")))
+;;     (message "buffer-name")
+;;     (display-buffer buffer-name)
+;;     (switch-to-buffer-other-window buffer-name)
+;;     (todotxt-mode)
+;;     (end-of-buffer)
+;;     )
+;;   )
+;; (global-set-key (kbd "<f12>") 'todo)
+
+;; (add-hook 'todotxt-mode-hook
+;;           (lambda ()
+;;             (local-set-key (kbd "d") 'todotxt-complete-toggle)
+;;             )
+;;           )
+
+;; turn of electric indent for lisp mode
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (message "eim off")
+            (electric-indent-mode 0)
+            )
+          )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS CUSTOMIZATION
@@ -287,6 +331,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(csv-separators (quote ("	" "	")))
+ '(custom-safe-themes
+   (quote
+    ("8e73c434ca39176b80c0fec0473813c1b71d8665a4ceb55789c848c3387ef677" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
+ '(doc-view-resolution 300)
  '(inhibit-startup-screen t)
  '(lua-indent-level 2)
  '(markdown-css-path "http://jasonm23.github.io/markdown-css-themes/foghorn.css")
@@ -315,7 +363,9 @@
            (local-set-key
             (kbd "C-c C-d")
             (quote snowth-deploy))))))
+ '(send-mail-function (quote smtpmail-send-it))
  '(todotxt-file "/home/hartmann/Dropbox/todo/todo.txt" nil (todotxt)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

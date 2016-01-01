@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; http://bzg.fr/emacs-strip-tease.html
+;; http://bzg.fr/emacs-stri---------------p-tease.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Don't use messages that you don't read
@@ -44,14 +44,14 @@
 ;;  '(mode-line-inactive ((t (:background "white" :foreground "white")))))
 
 ;; A small minor mode to use a big fringe
-(defvar bzg-big-fringe-mode nil)
-(define-minor-mode bzg-big-fringe-mode
+(defvar zen-mode nil)
+(define-minor-mode zen-mode
   "Minor mode to use big fringe in the current buffer."
   :init-value nil
   :global t
-  :variable bzg-big-fringe-mode
+  :variable zen-mode
   :group 'editing-basics
-  (if (not bzg-big-fringe-mode)
+  (if (not zen-mode)
       (set-fringe-style nil)
     (set-fringe-mode
      (/ (- (frame-pixel-width)
