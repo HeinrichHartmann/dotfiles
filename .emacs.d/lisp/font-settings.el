@@ -9,6 +9,7 @@ When called repeatedly, cycle thru a predefined set of fonts."
     ;; states starts from 1.
     (setq fontList (list
                     "Hack" "Ubuntu Mono" "DejaVu Serif" "DejaVu Sans" "DejaVu Sans Mono"
+                    "Erica Type :spacing monospace" "Traveling_Typewriter"
                     ))
     (setq currentState (if (get this-command 'state) (get this-command 'state) 1))
     (setq fontToUse (nth (1- currentState) fontList))
@@ -18,4 +19,3 @@ When called repeatedly, cycle thru a predefined set of fonts."
     (redraw-frame (selected-frame))
     )
   )
-

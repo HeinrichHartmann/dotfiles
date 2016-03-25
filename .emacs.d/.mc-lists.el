@@ -3,19 +3,41 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        abort-recursive-edit
         beginning-of-buffer
         beginning-of-visual-line
         electric-newline-and-maybe-indent
-        enlarge-window
-        enlarge-window-horizontally
+        end-of-buffer
+        eval-last-sexp
         eval-print-last-sexp
+        forward-sentence
         indent-for-tab-command
+        iy-go-to-char--command
         kill-region
-        shrink-window
-        shrink-window-horizontally
+        markdown-exdent-or-delete
+        org-backward-paragraph
+        org-beginning-of-line
+        org-cycle
+        org-delete-char
+        org-end-of-line
+        org-force-self-insert
+        org-kill-line
+        org-metaleft
+        org-metaright
+        org-self-insert-command
+        org-shiftleft
+        org-shiftright
+        org-shifttab
+        org-time-stamp-inactive
+        org-yank
         ))
 
 (setq mc/cmds-to-run-once
       '(
-        markdown-exdent-or-delete
+        describe-key
+        enlarge-window-horizontally
+        find-file
+        suspend-frame
+        switch-to-buffer
+        undo-tree-visualize
         ))

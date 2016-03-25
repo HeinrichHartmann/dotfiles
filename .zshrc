@@ -8,7 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="intheclear"
 #ZSH_THEME="random"
-ZSH_THEME="tjkirch"
+#ZSH_THEME="tjkirch"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -55,6 +55,18 @@ plugins=(git docker vagrant)
 
 source $ZSH/oh-my-zsh.sh
 
+PROMPT='%n@%m:%/ $(git_prompt_info)
+$ '
 PROMPT_EOL_MARK="<EOL>"
 
+if [ -n "$INSIDE_EMACS" ]; then
+    export EDITOR=emacsclient
+    unset zle_bracketed_paste
+fi
+
 source ~/.allrc
+
+
+
+
+

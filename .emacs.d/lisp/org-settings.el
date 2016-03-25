@@ -6,11 +6,6 @@
 ;(require 'org-beamer)
 
 ;; Standard settings
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-co" 'org-mode)
 
 (setq org-todo-keywords
       '((sequence "TODO" "WAIT" "|" "DONE" "CANCELED")))
@@ -44,7 +39,6 @@
 \\usepackage{lmodern}
 %\\usepackage[latin1]{inputenc}
 \\usepackage{verbatim}"
-	       
 	       ("\\section{%s}" . "\\section*{%s}")
 	       ("\\subsection{%s}" . "\\subsection*{%s}")
 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")

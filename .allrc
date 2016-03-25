@@ -1,21 +1,12 @@
-#
+# -*- mode: shell-script -*-
 # Environment
 #
 
 export PATH="/home/hartmann/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-export EDITOR=~/bin/emacs-nw
+export EDITOR="~/bin/qmacs"
 export SUDO_EDITOR=/usr/bin/editor
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 #
 # General
@@ -27,10 +18,10 @@ alias l='ls -lrtGF'
 alias emacs='emacsclient --create-frame -a "" --tty'
 alias xemacs='emacsclient --create-frame -a ""'
 
-alias e=eval $EDITOR
+alias e="eval $EDITOR"
 alias xe=xemacs
-alias x=emacs -F "'(fullscreen . fullboth)" -e "(find-file \"~/\")"
-alias egit=emacs -e "(magit-status)"
+alias x='emacs -F "(fullscreen . fullboth)" -e "(find-file \"~/\")"'
+alias egit='emacs -e "(magit-status)"'
 
 alias open="xdg-open"
 
@@ -53,21 +44,14 @@ function se() {
 }
 alias se-hosts='se /etc/hosts'
 
-function sh-reload() { source ~/.allrc }
+alias hibernate="pm-hibernate"
 
-# Password generator
-password-gen() {
-	local l=${1:-10}
-    [ "$l" == "" ] && l=16
-    tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
-}
+alias sh-reload='source ~/.allrc'
 
-
-if [ -d ~/.shell_functions ]; then
-    for file in ~/.shell_functions/*.sh; do
+if [[ -d ~/.shell_functions ]]
+then
+    for file in ~/.shell_functions/*.sh
+    do
         source "$file"
     done
 fi
-
-alias hibernate=pm-hibernate
-

@@ -15,8 +15,9 @@ function cd() #@ DESCRIPTION: Change directory, print most recent files
     then
         builtin cd "$dir" ## let cd provide error message
     else                  ## print content
-        printf "Latest Contents:\n"
-        ls -lt | tail -n+2 | head -n 5 | while read line; do echo "* $line"; done
-        printf "...\n"
+        printf "Contents:\n"
+        ls
+        # ls -lt | tail -n+2 | head -n 5 | while read line; do echo "* $line"; done
+        printf "\n"
     fi
 }
