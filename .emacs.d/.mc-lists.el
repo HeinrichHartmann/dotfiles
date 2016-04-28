@@ -3,41 +3,41 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        abort-recursive-edit
-        beginning-of-buffer
-        beginning-of-visual-line
+        LaTeX-insert-left-brace
+        delete-horizontal-space
         electric-newline-and-maybe-indent
-        end-of-buffer
-        eval-last-sexp
-        eval-print-last-sexp
-        forward-sentence
         indent-for-tab-command
-        iy-go-to-char--command
         kill-region
+        kill-sentence
+        kill-sexp
+        markdown-electric-backquote
         markdown-exdent-or-delete
-        org-backward-paragraph
         org-beginning-of-line
         org-cycle
-        org-delete-char
         org-end-of-line
         org-force-self-insert
         org-kill-line
         org-metaleft
         org-metaright
+        org-return-indent
         org-self-insert-command
+        org-set-tags-command
+        org-shiftcontrolleft
+        org-shiftcontrolright
         org-shiftleft
+        org-shiftmetaright
         org-shiftright
         org-shifttab
-        org-time-stamp-inactive
         org-yank
+        prelude-move-beginning-of-line
+        sp-backward-delete-char
+        sp-delete-char
+        sp-kill-hybrid-sexp
         ))
 
 (setq mc/cmds-to-run-once
       '(
-        describe-key
-        enlarge-window-horizontally
-        find-file
-        suspend-frame
-        switch-to-buffer
-        undo-tree-visualize
+        indent-rigidly
+        indent-rigidly-left
+        toggle-input-method
         ))

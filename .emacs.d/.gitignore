@@ -1,14 +1,23 @@
-# Ignore everything
-*
-
-# But not these files...
-!.gitignore
-!*.el
-# ...even if they are in subdirectories
-!*/
-
-session.*
-el-get
-elpa
+*~
+*.elc
 auto-save-list
-image-dired
+recentf
+savehist
+saveplace
+eshell
+elpa
+el-get
+semanticdb
+url
+ede-projects.el
+.DS_Store
+custom.el
+places
+.smex-items
+savefile/
+/prelude-modules.el
+projectile-bookmarks.eld
+session*
+.cask
+tramp
+/var/pcache

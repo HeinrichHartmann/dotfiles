@@ -1,0 +1,20 @@
+PATH="/usr/sbin"
+PATH+=":/usr/gnu/bin" # give GNU tools prefence
+PATH+=":/usr/bin"
+PATH+=":/opt/gcc-4.7.2/bin"
+PATH+=":/opt/circonus/bin"
+PATH+=":/opt/circonus/java/bin"
+PATH+=":/opt/omni/bin"
+PATH+=":/opt/OMNIperl/bin"
+PATH+=":/usr/sfw/bin"
+
+MANPATH="/usr/share/man"
+MANPATH+=":/opt/omni/share/man"
+MANPATH+=":/opt/omni/man"
+
+EDITOR=emacs
+PAGER=less
+
+PS1='\u@\h:\w\$ '
+
+export PATH MANPATH EDITOR PS1

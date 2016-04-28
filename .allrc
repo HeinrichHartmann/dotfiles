@@ -5,7 +5,7 @@
 export PATH="/home/hartmann/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-export EDITOR="~/bin/qmacs"
+export EDITOR="~/bin/emacs-nw"
 export SUDO_EDITOR=/usr/bin/editor
 
 #
@@ -15,13 +15,10 @@ alias ls="ls --color=tty --group-directories-first"
 alias l='ls -lrtGF'
 
 # -a "" runs emacs --daemon and tries to connect
-alias emacs='emacsclient --create-frame -a "" --tty'
-alias xemacs='emacsclient --create-frame -a ""'
+alias emacs='emacsclient --create-frame -a ""'
+alias e='/usr/bin/emacs -nw -q'
 
-alias e="eval $EDITOR"
-alias xe=xemacs
-alias x='emacs -F "(fullscreen . fullboth)" -e "(find-file \"~/\")"'
-alias egit='emacs -e "(magit-status)"'
+alias magit='emacs $(pwd) --eval "(magit-status)"'
 
 alias open="xdg-open"
 
