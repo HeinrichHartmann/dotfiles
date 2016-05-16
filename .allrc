@@ -41,6 +41,12 @@ function se() {
 }
 alias se-hosts='se /etc/hosts'
 
+function pman() {
+    fname="$1.pdf"
+    man -Tpdf $@ > "~/man/$fname" && open "~/man/$fname"
+}
+
+
 alias hibernate="pm-hibernate"
 
 alias sh-reload='source ~/.allrc'
