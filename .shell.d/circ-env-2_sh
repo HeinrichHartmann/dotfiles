@@ -1,0 +1,57 @@
+# _NODES are physical hosts
+export SNOWTH_TEST_NODE=HH.DS # host in dev, that can be used to run scripts remotely
+export SNOWTH_REF_NODE=S12.DS
+export SNOWTH_DEV_NODE=S10.DS
+
+# w/o _NODE, the service is meant, including a port
+export SNOWTH_REF=${SNOWTH_REF_NODE}:8112 # this should be a production copy
+export SNOWTH_DEV=${SNOWTH_DEV_NODE}:8112 # here is the current checkout
+
+TAG_START="# REMOTE START"
+TAG_END  ="# REMOTE END"
+
+REMOTE_INIT=$(cat <<'EOINIT')
+TAG_START="# REMOTE START"
+TAG_END  ="# REMOTE END"
+
+function update-conf {
+    FILE="$1"
+    CONTENT="$2"
+    SUDO="$3"
+    if grep --quiet --line-regexp "$TAG_START" --file "$FILE"
+    then
+        printf "%s\n" "$FILE is up to date."
+    else
+        printf "%s\n" "Updating $FILE."
+        if [[ -n $SUDO ]]
+        then
+            printf "%s" "$CONTENT" | sudo tee -a "$FILE"
+        else
+            printf "%s" "$CONTENT" | tee -a "$FILE"
+        fi
+    fi
+}
+
+
+update-conf .bash_profile $(cat <<EOF)
+<BASH_PROFILE>
+EOF
+
+update-conf .tmux.conf $(cat <<EOF)
+<TMUX_CONF>
+EOF
+
+update-conf /etc/hosts $(cat <<EOF) SUDO
+<HOSTS>
+EOF
+
+'EOINIT'
+
+function __extract-remote {
+   sed -n '/'"$TAG_START"'/,/'"$TAG_END"'/p' "$1"
+}
+
+function circ-setup-host {
+   sed 
+   ssh $1 
+}
