@@ -1,0 +1,6 @@
+[submodule "prelude"]
+	path = prelude
+	url = https://github.com/HeinrichHartmann/prelude
+[submodule ".emacs.d"]
+	path = .emacs.d
+	url = https://github.com/HeinrichHartmann/prelude
