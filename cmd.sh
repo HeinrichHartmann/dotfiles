@@ -1,18 +1,12 @@
 #!/bin/bash
 
-USAGE="Usage: cmd.sh <sub> <opts>
+DOT_CMD=$(basename $0)
+echo $DOT_CMD
+DOT_LOC=$(readlink $0 || echo $0)
+DOT_DIR=$(dirname $DOT_LOC)
 
-* cmd.sh add <path>
+USAGE="Usage: $DOT_CMD <sub> <opts>"
 
-  Add path to dotfile repository
-
-* cmd.sh push
-
-  Push commited changes to GitHub
-
-"
-
-cd $(dirname $0)
 set -e
 
 function ask {
@@ -26,15 +20,44 @@ function die {
     exit 1
 }
 
+USAGE="$USAGE
+* $DOT_CMD hoist <file> [<file>...]
+     add files to dot-files.
+     replace file by symlink.
+"
 function do_hoist {
     src="$1"
     name="$(basename "$src")"
-    tar="./$name"
+    tar="$DOT_DIR/$name"
     [[ ! -e "$tar" ]] || die "File exists $tar"
     ask mv "$src" "$tar"
     ask ln -s "$tar" "$src"
-    ask git add "$tar"
-    ask git commit -m "Added $tar"
+    (
+        cd "$DOT_DIR"
+        git add "$tar"
+        git commit -m "Added $tar"
+        git push
+    )
+}
+
+USAGE="$USAGE
+* $DOT_CMD restore <file> [<file>...]
+     replace symlink in ~/ by original file
+     remove file from dot-files
+"
+function do_restore {
+    tar="$1"
+    [[ -h "$tar" ]] || die "Not a symlink: $tar"
+    src="$DOT_DIR/$(basename $(readlink "$1"))"
+    [[ -e "$src" ]] || die "Not found: $src"
+    ask rm "$tar"
+    ask mv "$src" "$tar"
+    (
+        cd "$DOT_DIR"
+        git add "$src"
+        git commit -m "Removed $src"
+        git push
+    )
 }
 
 cmd=$1
@@ -42,9 +65,9 @@ shift
 case $cmd in
     "" | "-h" | "--help")
         echo "$USAGE"
+        exit 0;
         ;;
     "hoist")
-        args="$@"
         while [[ $# > 0 ]]
         do
             do_hoist "$1"
@@ -53,21 +76,11 @@ case $cmd in
         exit 0;
         ;;
     "restore")
-        # restore file $1
-        src="$1"
-        tar="~/$1"
-        [[ ! -h "$tar" ]] || die "Not a symlink: $tar"
-        ask rm "$tar"
-        ask mv -n "$src" "$tar"
-        ask git add "$src"
-        ask git commit -m "Removed $src"
+        while [[ $# > 0 ]]
+        do
+            do_restore "$1"
+            shift
+        done
         exit 0;
         ;;
-    "push")
-        git push
-        exit 0;
-        ;;
-    "list")
-        ls -lA | grep -v -e '.git' -e cmd.sh
-        exit 0;
 esac
