@@ -40,6 +40,14 @@ function do_hoist {
     )
 }
 
+function do_checkout {
+    src="$1"
+    name="$(basename "$src")"
+    tar="$DOT_DIR/$name"
+    [[ -e "$tar" ]] || die "Not found: $tar"
+    ask ln -s "$tar" "$HOME"
+}
+
 USAGE="$USAGE
 * $DOT_CMD restore <file> [<file>...]
      replace symlink in ~/ by original file
@@ -75,6 +83,14 @@ case $cmd in
         done
         exit 0;
         ;;
+    "checkout")
+        while [[ $# > 0 ]]
+        do
+            do_checkout "$1"
+            shift
+        done
+        exit 0;
+        ;;
     "restore")
         while [[ $# > 0 ]]
         do
@@ -84,3 +100,4 @@ case $cmd in
         exit 0;
         ;;
 esac
+
