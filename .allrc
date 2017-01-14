@@ -1,0 +1,64 @@
+# -*- mode: shell-script -*-
+# Environment
+#
+
+export PATH="$HOME/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+export EDITOR="emacs -nw -q"
+export SUDO_EDITOR="emacs -nw -q"
+
+#
+# General
+#
+#alias ls="ls --color=tty --group-directories-first"
+#alias l='ls -lrtGF'
+
+# -a "" runs emacs --daemon and tries to connect
+alias ec='emacsclient --create-frame'
+alias e='emacs -nw -q'
+
+alias magit='emacs $(pwd) --eval "(magit-status)"'
+
+alias emacs='emacs.sh'
+
+# alias open="xdg-open"
+
+alias println='printf "%s\n"'
+man_bash () { man bash | less -p "^[[:space:]]*$1 "; }
+
+# sudo edit
+function sudo_edit() {
+    FILE=$1
+    [[ $# -ne 1 || ! -e $FILE ]] && {
+        echo "Usage: $0 <filename>"
+        return 1 # FAIL
+    }
+    TMP_FILE=$(mktemp)
+    cp "$FILE" "$TMP_FILE"
+    sudoedit "$FILE"
+    printf "Diff:\n"
+    diff "$FILE" "$TMP_FILE"
+    return 0
+}
+alias se-hosts='se /etc/hosts'
+
+function pman() {
+    fname="$1.pdf"
+    man -Tpdf $@ > "~/man/$fname" && open "~/man/$fname"
+}
+
+alias hibernate="pm-hibernate"
+
+if [[ -d ~/.shell.d ]]
+then
+    for file in ~/.shell.d/*.sh
+    do
+        source "$file"
+    done
+fi
+
+# added by Anaconda2 4.1.0 installer
+#export PATH="/Users/hartmann/anaconda2/bin:$PATH"
+
+source .profile
