@@ -1,2 +1,2 @@
 install:
-	ln -s ~/bin/dotcmd $$(pwd)/cmd.sh
+	ln -s $$(pwd)/cmd.sh ~/bin/dotcmd
