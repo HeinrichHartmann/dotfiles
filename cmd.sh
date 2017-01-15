@@ -1,9 +1,8 @@
 #!/bin/bash
 
 DOT_CMD=$(basename $0)
-echo $DOT_CMD
 DOT_LOC=$(readlink $0 || echo $0)
-DOT_DIR=$(dirname $DOT_LOC)
+DOT_DIR=$(cd $(dirname $DOT_LOC); pwd)
 
 USAGE="Usage: $DOT_CMD <sub> <opts>"
 
@@ -68,6 +67,14 @@ function do_restore {
     )
 }
 
+function do_update {
+    (
+	cd "$DOT_DIR"
+	git pull
+    )
+}
+
+
 cmd=$1
 shift
 case $cmd in
@@ -99,5 +106,9 @@ case $cmd in
         done
         exit 0;
         ;;
+    "update")
+	do_update
+	exit 0;
+	;;
 esac
 
