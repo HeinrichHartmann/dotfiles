@@ -1,5 +1,3 @@
-install:
-	ln -s $$(pwd)/cmd.sh ~/bin/
-
-setup:
-	git submodule update --recursive
+.PHONY:submodule-init
+submodule-init:
+	git submodule update --recursive --init
