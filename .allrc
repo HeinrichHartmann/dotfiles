@@ -1,31 +1,40 @@
 # -*- mode: shell-script -*-
+#
+# .allrc should be sourced by all shells at the end of it's rc_file
+#
+#
 # Environment
 #
-
-export PATH="$HOME/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-export EDITOR="emacs -nw -q"
-export SUDO_EDITOR="emacs -nw -q"
 
 #
 # General
 #
-#alias ls="ls --color=tty --group-directories-first"
+
+# proper print function
+function print {
+    printf "%s\n" "$@"
+}
+function print-args {
+    printf ":%s:" $@
+}
+
+# ls
+#alias ls='ls --group-directories-first'
 #alias l='ls -lrtGF'
 
-# -a "" runs emacs --daemon and tries to connect
-alias ec='emacsclient --create-frame'
-alias e='emacs -nw -q'
+# emacs
+export EDITOR="emacs -nw -q"
+export SUDO_EDITOR="emacs -nw -q"
 
+alias e='emacs -nw -q'
+alias emacs='emacs.sh'
 alias magit='emacs $(pwd) --eval "(magit-status)"'
 
-alias emacs='emacs.sh'
-
-# alias open="xdg-open"
-
-alias println='printf "%s\n"'
-man_bash () { man bash | less -p "^[[:space:]]*$1 "; }
+case "$(uname)" in
+    "Linux")
+        alias open="xdg-open"
+        ;;
+esac
 
 # sudo edit
 function sudo_edit() {
@@ -43,11 +52,6 @@ function sudo_edit() {
 }
 alias se-hosts='se /etc/hosts'
 
-function pman() {
-    fname="$1.pdf"
-    man -Tpdf $@ > "~/man/$fname" && open "~/man/$fname"
-}
-
 alias hibernate="pm-hibernate"
 
 if [[ -d ~/.shell.d ]]
@@ -58,4 +62,7 @@ then
     done
 fi
 
-[[ -e .profile ]] && source .profile
+if [[ -e .profile ]]
+then
+    source .profile
+fi

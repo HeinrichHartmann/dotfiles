@@ -41,6 +41,3 @@ alias pkg-install="sudo apt-get install"
 alias pkg-list="dpkg --get-selections | cut -f 1" # list all installed packages
 alias pkg-list-installed="aptitude search '~i!~M'" # list all explicity installed packages
 alias pkg-contents="dpkg -L" # show contensts of an installed package package
-
-
-
