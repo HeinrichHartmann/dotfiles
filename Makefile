@@ -7,6 +7,7 @@ submodule-init:
 full: basic zsh emacs
 
 basic:
+	$(dotcmd) checkout bin
 	$(dotcmd) checkout .profile
 	$(dotcmd) checkout .allrc
 	$(dotcmd) checkout .shell.d

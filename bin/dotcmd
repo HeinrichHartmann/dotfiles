@@ -19,11 +19,6 @@ function die {
     exit 1
 }
 
-USAGE="$USAGE
-* $DOT_CMD hoist <file> [<file>...]
-     add files to dot-files.
-     replace file by symlink.
-"
 function do_hoist {
     src="$1"
     name="$(basename "$src")"
@@ -35,7 +30,7 @@ function do_hoist {
         cd "$DOT_DIR"
         git add "$tar"
         git commit -m "Added $tar"
-        git push                # 
+        git push
     )
 }
 
@@ -50,11 +45,6 @@ function do_checkout {
     ln -s "$src" "$tar"
 }
 
-USAGE="$USAGE
-* $DOT_CMD restore <file> [<file>...]
-     replace symlink in ~/ by original file
-     remove file from dot-files
-"
 function do_restore {
     tar="$1"
     [[ -h "$tar" ]] || die "Not a symlink: $tar"
@@ -69,14 +59,6 @@ function do_restore {
         git push
     )
 }
-
-function do_update {
-    (
-        cd "$DOT_DIR"
-        git pull
-    )
-}
-
 
 cmd=$1
 shift
@@ -109,8 +91,20 @@ case $cmd in
         done
         exit 0;
         ;;
-    "update")
-        do_update
+    "pull")
+        (
+            cd "$DOT_DIR"
+            git pull
+        )
+        exit 0;
+        ;;
+    "push")
+        (
+            cd "$DOT_DIR"
+            git diff
+            git commit -a # invokes editor
+            git push
+        )
         exit 0;
         ;;
 esac
