@@ -1,0 +1,6 @@
+#!/bin/bash
+EXT=${1:-.html}
+TMPFILE=`mktemp '/tmp/bcat.XXXXXXXX'`"$EXT" || exit 1
+cat > $TMPFILE
+/Applications/Safari.app/Contents/MacOS/Safari $TMPFILE 2> /dev/null
+rm $TMPFILE

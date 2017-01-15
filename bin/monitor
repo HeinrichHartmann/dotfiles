@@ -1,0 +1,15 @@
+#!/bin/bash
+
+HOST=$1
+shift
+INT=${1:-1}
+shift
+
+while true;
+do
+    date "+%Y-%m-%d %H:%M:%S: " | xargs printf "%s %s " "$HOST"
+    ping -n -c 1 -t 1 "$HOST" > /dev/null \
+        && echo OK \
+        || echo FAIL
+    sleep $INT
+done
