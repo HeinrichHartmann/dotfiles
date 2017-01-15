@@ -1,8 +1,8 @@
 #!/bin/bash
 
 DOT_CMD=$(basename $0)
-DOT_LOC=$(readlink $0 || echo $0)
-DOT_DIR=$(cd $(dirname $DOT_LOC); pwd)
+# this file should be located in $DOT_DIR/bin
+DOT_DIR=$(cd $(readlink --canonicalize $(dirname $0)); cd ..; pwd)
 
 USAGE="Usage: $DOT_CMD <sub> <opts>"
 
@@ -35,7 +35,7 @@ function do_hoist {
         cd "$DOT_DIR"
         git add "$tar"
         git commit -m "Added $tar"
-        git push
+        git push                # 
     )
 }
 

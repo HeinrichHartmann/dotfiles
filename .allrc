@@ -10,10 +10,6 @@
 # General
 #
 
-# proper print function
-function print {
-    printf "%s\n" "$@"
-}
 function print-args {
     printf ":%s:" $@
 }
@@ -64,5 +60,5 @@ fi
 
 if [[ -e .profile ]]
 then
-    source .profile
+    source ~/.profile
 fi
