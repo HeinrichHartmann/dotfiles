@@ -23,13 +23,13 @@ function add-to-path {
     fi
 }
 add-to-path "$HOME/bin" # ~/bin has preferences
+add-to-path "/usr/gnu/bin"  # gnu tools get precedence if available
 add-to-path "/usr/local/sbin"
 add-to-path "/usr/local/bin"
 add-to-path "/usr/sbin"
 add-to-path "/usr/bin"
 add-to-path "/sbin"
 add-to-path "/bin"
-add-to-path "/usr/gnu/bin"
 add-to-path "/opt/gcc-4.8.1/bin"
 add-to-path "/opt/circonus/bin"
 add-to-path "/opt/circonus/java/bin"
