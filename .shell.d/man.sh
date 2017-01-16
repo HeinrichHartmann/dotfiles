@@ -10,3 +10,8 @@ function man-pdf {
 function man-bash {
     man bash | less -p "^[[:space:]]*$1 ";
 }
+
+# get help on bash builtins
+function help-bash {
+    bash -c "help $@" | less
+}

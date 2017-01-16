@@ -1,6 +1,12 @@
 #
 # from  C.FA Johnson - Pro Bash Programming
 #
+
+function print-args #@ DESCIRPTION: Print arguments embraced in ::
+{
+    printf ":%s:" $@
+}
+
 function cd() #@ DESCRIPTION: Change directory, print most recent files
 {             #@ USAGE: cd DIR
     local dir=$1
