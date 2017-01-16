@@ -1,8 +1,11 @@
 #!/bin/bash
-
+#
+# Control dotfiles
+#
+# This file must should be located in $DOT_DIR/bin
+#
 DOT_CMD=$(basename $0)
-# this file should be located in $DOT_DIR/bin
-DOT_DIR=$(cd $(readlink --canonicalize $(dirname $0)); cd ..; pwd)
+DOT_DIR=$(cd $(realpath $(dirname $0)); cd ..; pwd)
 
 USAGE="Usage: $DOT_CMD <sub> <opts>"
 
@@ -59,14 +62,9 @@ function do_restore {
         git push
     )
 }
-
 cmd=$1
 shift
 case $cmd in
-    "" | "-h" | "--help")
-        echo "$USAGE"
-        exit 0;
-        ;;
     "hoist")
         while [[ $# > 0 ]]
         do
@@ -105,6 +103,10 @@ case $cmd in
             git commit -a # invokes editor
             git push
         )
+        exit 0;
+        ;;
+    *)
+        echo "xxx $USAGE"
         exit 0;
         ;;
 esac

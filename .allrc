@@ -18,6 +18,11 @@ export PAGER=less
 
 # locale
 export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Coloring
+export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # http://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
 # portable way to check if a function exists on $PATH
