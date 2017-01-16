@@ -15,3 +15,7 @@ function man-bash {
 function help-bash {
     bash -c "help $@" | less
 }
+
+function man-gnu {
+    MANPATH=$(find /usr/local/Cellar -type d -name gnuman | paste -s -d : -) man $@
+}
