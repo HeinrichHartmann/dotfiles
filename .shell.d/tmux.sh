@@ -7,3 +7,13 @@ function rmux { # remote tmux
 }
 
 export DISABLE_AUTO_TILE=true
+
+function tman {
+    tmux split-window -h "man $@"
+}
+
+function tmux-man-last {
+    last_line=$(fc -ln -1)
+    last_cmd=${last_line%% *}
+    tmux split-window -h "man $last_cmd"
+}

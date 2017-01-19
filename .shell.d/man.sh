@@ -19,3 +19,9 @@ function help-bash {
 function man-gnu {
     MANPATH=$(find /usr/local/Cellar -type d -name gnuman | paste -s -d : -) man $@
 }
+
+function man-last {
+    last_line=$(fc -ln -1)
+    last_cmd=${last_line%% *}
+    man "$last_cmd"
+}
