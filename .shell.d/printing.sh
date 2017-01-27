@@ -6,12 +6,6 @@ function git-head {
 }
 
 function git2ps {
-    # --left-title='lt #?2||$e $T|' \
-    # --center-title='ct #?1|$t1|$n|' \
-    # --left-footer='lf #?l!%E!#?v|%E|%s./%s#|!' \
-    # --footer='f #?l|#!s-$f-, -||' \
-    # --right-footer='#?l!%s./%s#!#?v|%s./%s#|%E|!' \
-    # --right-footer='%s./%s#' \
     a2ps --header='' \
          --left-title='$d' \
          --center-title='$n' \
@@ -19,6 +13,9 @@ function git2ps {
          --left-footer="`git-head`" \
          --footer="" \
          --right-footer="`date +'%F %H:%M:%S'`" \
+         --medium=letter \
+         --line-numbers=0 \
+         --lines-per-page=80 \
          --output=src.ps \
          $@
 }
