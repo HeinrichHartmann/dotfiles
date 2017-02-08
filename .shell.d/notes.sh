@@ -34,16 +34,3 @@ function note-add {
         esac
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

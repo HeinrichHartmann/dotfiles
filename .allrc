@@ -7,23 +7,67 @@
 #
 # Targeted systems include: Ubuntu Linux, MacOSX, Solaris (OmniOS)
 #
-# PATH
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-PATH="$HOME/bin:$PATH" # override system paths from ~/bin
-export PATH
-
-# explicitly inherit from /etc/manpath.config
-export MANPATH="$(manpath)"
-export PAGER=less
-
-# locale
-export LANG=en_US.UTF-8
-
+#
 # http://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
 # portable way to check if a function exists on $PATH
 function exists-p {
     command -v $1 >/dev/null 2>&1
 }
+
+
+PATH=""
+function add-to-path {
+    if [[ -d $1 ]]
+    then
+        PATH+=":$1"
+    fi
+}
+add-to-path "$HOME/bin" # ~/bin has preferences
+add-to-path "/usr/gnu/bin"  # gnu tools get precedence if available
+add-to-path "/usr/local/sbin"
+add-to-path "/usr/local/bin"
+add-to-path "/usr/sbin"
+add-to-path "/usr/bin"
+add-to-path "/sbin"
+add-to-path "/bin"
+add-to-path "/opt/gcc-4.8.1/bin"
+add-to-path "/opt/circonus/bin"
+add-to-path "/opt/circonus/java/bin"
+add-to-path "/opt/omni/bin"
+add-to-path "/opt/OMNIperl/bin"
+add-to-path "/usr/sfw/bin"
+export PATH
+
+# explicitly inherit from /etc/manpath.config
+if exists-p manpath
+then
+    MANPATH="$(manpath)"
+else
+    MANPATH=""
+fi
+function add-to-man {
+    if [[ -d $1 ]]
+    then
+        MANPATH+=":$1"
+    fi
+}
+
+add-to-man "/usr/share/man"
+add-to-man "/opt/local/man"
+add-to-man "/opt/local/share/man"
+add-to-man "/opt/circonus/man"
+add-to-man "/opt/circonus/share/man"
+add-to-man "/opt/omni/man"
+add-to-man "/opt/omni/share/man"
+export MANPATH
+
+export PAGER=less
+
+# locale
+export LANG=en_US.UTF-8
+
+# Coloring
+export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # use emacs if available
 if exists-p emacs
@@ -40,3 +84,6 @@ then
         source "$file"
     done
 fi
+
+# .profile contains host specific settings
+[[ -e .profile ]] && source .profile

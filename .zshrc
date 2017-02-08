@@ -65,8 +65,8 @@ if [ -n "$INSIDE_EMACS" ]; then
 fi
 
 # http://zsh.sourceforge.net/Guide/zshguide02.html#l16
-HISTSIZE=100000
-SAVEHIST=100000
+HISTSIZE=10000000
+SAVEHIST=10000000
 
 # use different history files for root and normal users
 if (( ! EUID )); then
@@ -112,4 +112,13 @@ setopt EXTENDED_HISTORY
 # history list.
 setopt HIST_REDUCE_BLANKS
 
-source ~/.allrc
+# zsh history settings cf.
+# http://unix.stackexchange.com/questions/273861/unlimited-history-in-zsh
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+[[ -e ~/.allrc ]] &&  source ~/.allrc
