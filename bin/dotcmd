@@ -41,7 +41,11 @@ function do_checkout {
     # always checkout to homedir
     name=$(basename $1)
     tar="$HOME/$name"
-    [[ ! -e $tar ]] || die "File exists: $tar"
+    if [[ -e $tar ]]
+    then
+        echo "Fie $tar exists. Backing up to $tar.bak"
+        mv "$tar" "$tar.bak"
+    fi
     # always read from DOT_DIR
     src="$DOT_DIR/$name"
     [[ -e $src ]] || die "Not found: $src"
