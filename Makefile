@@ -21,3 +21,11 @@ zsh:
 
 emacs:
 	$(dotcmd) checkout .emacs.d
+
+emacs-install:
+	wget https://ftp.gnu.org/gnu/emacs/emacs-25.1.tar.gz && \
+	tar -xzf emacs-25.1.tar.gz && \
+	autogen.sh && \
+	./configure && \
+	make && \
+	sudo make install
