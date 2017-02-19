@@ -10,5 +10,6 @@ export NPM_PACKAGES="$HOME/.npm"
 [[ -e "$NPM_PACKAGES" ]] || mkdir -p "$NPM_PACKAGES"
 PATH="$PATH:$NPM_PACKAGES/bin"
 MANPATH="$MANPATH:$NPM_PACKAGES/share/man"
+
 # Tell Node about these packages
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
