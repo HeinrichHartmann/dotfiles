@@ -91,6 +91,3 @@ then
         source "$file"
     done
 fi
-
-# .profile contains host specific settings
-[[ -e .profile ]] && source .profile
