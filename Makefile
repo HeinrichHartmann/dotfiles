@@ -4,20 +4,16 @@ dotcmd = bin/dotcmd
 submodule-init:
 	git submodule update --recursive --init
 
-full: basic zsh bash emacs
-	$(dotcmd) checkout .tmux.conf
+full: basic emacs
 
-basic:
-	$(dotcmd) checkout bin
-	$(dotcmd) checkout .shell.d
-	$(dotcmd) checkout .allrc
-
-bash:
+basic: submodule-init
 	$(dotcmd) checkout .bashrc
-
-zsh:
 	$(dotcmd) checkout .zshrc
 	$(dotcmd) checkout .oh-my-zsh
+	$(dotcmd) checkout .allrc
+	$(dotcmd) checkout .shell.d
+	$(dotcmd) checkout bin
+	$(dotcmd) checkout .tmux.conf
 
 emacs:
 	$(dotcmd) checkout .emacs.d
