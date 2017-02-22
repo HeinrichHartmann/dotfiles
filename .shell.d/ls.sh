@@ -30,3 +30,7 @@ function cd()
 function lsd {
     ls -l $@ | grep ^d | cat
 }
+
+function f {
+    find . | grep $@
+}
