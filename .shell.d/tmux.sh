@@ -5,7 +5,7 @@ function lmux {
     # new session
     # tmux new-session -s main -A
     tmux attach -t main 2> /dev/null ||
-        tmux new-session -s main \; rename-window "home"
+        (cd $HOME; tmux new-session -s main \; rename-window "home")
 }
 
 # remote tmux
