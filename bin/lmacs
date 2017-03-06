@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+use File::Basename;
+use strict;
+use warnings;
+use Env;
+use Cwd;
+
+my $root = `git rev-parse --show-toplevel`;
+$root =~ s/^\s+|\s+$//g;
+if ($root eq "") {
+    $root = getcwd;
+}
+
+my $sockname = $root . "/.emacs.sock";
+
+print "Opening emacs session at:", $sockname;
+
+$ENV{TERM}="xterm-256color";
+
+exec (
+    "emacsclient",
+    '--alternate-editor=', # start emacs if not running
+    '--create-frame',      # don't connect to an existing frame
+    "--socket=${sockname}" # start a server for this directory
+);
