@@ -1,0 +1,4 @@
+# https://gist.github.com/martijnvermaat/8070533
+if test "$SSH_AUTH_SOCK" ; then
+    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi
