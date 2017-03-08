@@ -23,9 +23,9 @@ emacs-install:
 	[ -e emacs-25.1.tar.gz ] || wget https://ftp.gnu.org/gnu/emacs/emacs-25.1.tar.gz && \
 	tar -xzf emacs-25.1.tar.gz && \
 	cd emacs-25.1 && \
-	autogen.sh && \
+	./autogen.sh && \
 	CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" LDFLAGS="-ggdb3" \
-        ./configure --prefix=$HOME --disable-ns-self-contained --with-ns=no --with-x=no && \
+        ./configure --prefix=$$HOME --disable-ns-self-contained --with-ns=no --with-x=no && \
 	make && \
 	make install
 
