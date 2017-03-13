@@ -1,15 +1,17 @@
 # local tmux
 function lmux {
+    iterm2-set-title LMUX
     # The default-command causes the session name to be "reattach to
     # user namespace". Hence we override this name if we create a
     # new session
     # tmux new-session -s main -A
     tmux attach -t main 2> /dev/null ||
-        (cd $HOME; tmux new-session -s main \; rename-window "home")
+      (cd $HOME; tmux new-session -s main \; rename-window "home")
 }
 
 # remote tmux
 function rmux {
+    iterm2-set-title "$1"
     ssh "$@" -t "tmux new-session -s main -A"
 }
 
