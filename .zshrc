@@ -51,13 +51,14 @@ HIST_STAMPS="yyyy-mm-dd"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git docker vagrant)
+plugins=(git vagrant docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
 PROMPT='%n@%m:%/ $(git_prompt_info)
 $ '
 PROMPT_EOL_MARK="<EOL>"
+RPROMPT='$(date +"%Y-%m-%d %H:%M:%S")'
 
 if [ -n "$INSIDE_EMACS" ]; then
     export EDITOR=emacsclient

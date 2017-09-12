@@ -13,11 +13,15 @@ function git2ps {
          --left-footer="`git-head`" \
          --footer="" \
          --right-footer="`date +'%F %H:%M:%S'`" \
-         --medium=letter \
          --line-numbers=0 \
          --lines-per-page=80 \
+         --highlight-level=none \
+         --medium=A4 \
+         --sides=2 \
+         --file-align=sheet \
          --output=src.ps \
-         $@
+         $@ &&
+     ps2pdf -sPAPERSIZE=a4 -dOptimize=true -dEmbedAllFonts=true src.ps
 }
 
 function git2ps-tuned {

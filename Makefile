@@ -25,7 +25,7 @@ emacs-install:
 	cd emacs-25.1 && \
 	./autogen.sh && \
 	CFLAGS="-ggdb3 -O0" CXXFLAGS="-ggdb3 -O0" LDFLAGS="-ggdb3" \
-        ./configure --prefix=$$HOME --disable-ns-self-contained --with-ns=no --with-x=no && \
+        ./configure --prefix=$$HOME  && \
 	make && \
 	make install
 

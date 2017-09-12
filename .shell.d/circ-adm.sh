@@ -8,14 +8,19 @@ function circ-www-update {
 }
 
 function circ-vpn-dev {
-    tmux new-session -d -s vpn -n vpn-beltsville
-    tmux send -t vpn:0 "cd ~/Circonus/vpns/bel && sudo openvpn heinrich.hartmann.conf" ENTER
+    tmux new-session -d -s vpn
+    tmux new-window -t vpn:0
+    tmux rename-window -t vpn:0 "vpn-dev"
+    tmux send -t vpn:0 "cd ~/Circonus/vpns/bel && sudo openvpn heinrich.hartmann-yubi.conf" ENTER
+    tmux attach -t vpn:0
 }
 
 function circ-vpn-chi {
     tmux new-session -d -s vpn
-    tmux new-window -t vpn:1 -n vpn-chicago
-    tmux send -t vpn:1 "cd ~/Circonus/vpns/chicago-il2 && sudo openvpn heinrich.hartmann.conf" ENTER
+    tmux new-window -t vpn:1
+    tmux rename-window -t vpn:1 vpn-chicago
+    tmux send -t vpn:1 "cd ~/Circonus/vpns/chicago-il2 && sudo openvpn heinrich.hartmann-yubi.conf" ENTER
+    tmux attach -t vpn:1
 }
 
 function circ-vpn-kill {
