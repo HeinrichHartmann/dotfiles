@@ -55,10 +55,7 @@ plugins=(git vagrant docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
-PROMPT='%n@%m:%/ $(git_prompt_info)
-$ '
-PROMPT_EOL_MARK="<EOL>"
-RPROMPT='$(date +"%Y-%m-%d %H:%M:%S")'
+
 
 if [ -n "$INSIDE_EMACS" ]; then
     export EDITOR=emacsclient
@@ -121,5 +118,29 @@ setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+
+# Insert data on ESC-.
+function zsh-insert-date { LBUFFER+="$(date +%F)" }   # shell function
+zle -N zsh-insert-date                                # create command
+bindkey "^X." zsh-insert-date                         # Bind it to ESC-.
+
+# PROMPT
+PROMPT='%n@%m:%/ $(git_prompt_info)
+$ '
+PROMPT_EOL_MARK="<EOL>"
+RPROMPT='$(date +"%Y-%m-%d %H:%M:%S") [$zsh_last_command_duration]'
+
+# show command timings in prompt
+typeset -F SECONDS=0
+function preexec() {
+    zsh_command_timer=$SECONDS
+}
+function precmd() {
+    if [ $zsh_command_timer ]; then
+      zsh_last_command_duration=$(printf "%.3fs" $(($SECONDS - $zsh_command_timer)))
+      unset zsh_command_timer
+    fi
+}
 
 [[ -e ~/.allrc ]] &&  source ~/.allrc
