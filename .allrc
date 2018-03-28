@@ -7,7 +7,7 @@
 #
 # Targeted systems include: Ubuntu Linux, MacOSX, Solaris (OmniOS)
 #
-#
+
 # http://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
 # portable way to check if a function exists on $PATH
 function exists-p {
@@ -42,14 +42,15 @@ export PATH
 export PAGER=less
 
 # locale
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
+LOC="C"
+export LANG="$LOC"
+export LC_COLLATE="$LOC"
+export LC_CTYPE="$LOC"
+export LC_MESSAGES="$LOC"
+export LC_MONETARY="$LOC"
+export LC_NUMERIC="$LOC"
+export LC_TIME="$LOC"
+export LC_ALL="$LOC"
 export TZ="utc"
 
 # explicitly inherit from /etc/manpath.config
@@ -81,8 +82,8 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 # use emacs if available
 if exists-p emacs
 then
-    export EDITOR="emacs -nw -q"
-    export SUDO_EDITOR="emacs -nw -q"
+    export EDITOR="emacs.sh"
+    export SUDO_EDITOR="emacs.sh"
 fi
 
 if [[ -d ~/.shell.d ]]

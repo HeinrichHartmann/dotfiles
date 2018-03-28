@@ -1,14 +1,17 @@
 # local tmux
 function lmux {
     title=${1:-lmux}
+    shift
     iterm2-title-set $title
     iterm2-tab-color-set 192 192 192 # grey
     # The default-command causes the session name to be "reattach to
     # user namespace". Hence we override this name if we create a
     # new session
-    # tmux new-session -s main -A
-    tmux attach -t $title 2> /dev/null ||
-      (cd $HOME; tmux new-session -s $title \; rename-window "$title-home")
+    (
+      cd ${DIR:-$HOME}; # new windows will be opened in here
+      tmux new-session -t $title $@ ||\
+      tmux new-session -s $title $@ \; rename-window "$title-home"
+    )
 }
 
 # remote tmux
@@ -44,4 +47,10 @@ function tmux-center {
     fringe=$(dc -e "$panewidth $midwidth - 2 / p")
     tmux split-window $@ -h -d -l $fringe 'cat > /dev/null'
     tmux split-window $@ -h -d -b -l $fringe 'cat > /dev/null'
+}
+
+function wp-blog {
+    tmux-center &&
+    cd ~/p-workbench/HeinrichHartmann.github.io/ &&
+    emacs .
 }

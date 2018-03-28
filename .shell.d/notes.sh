@@ -1,5 +1,7 @@
 NOTE_ROOT="$HOME/git/notes"
 
+function println { printf "%s\n" $@ }
+
 function note-add {
     (   # cd only in subshell
         set -e

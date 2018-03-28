@@ -55,9 +55,7 @@ plugins=(git vagrant docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
-
-
-if [ -n "$INSIDE_EMACS" ]; then
+if [[ -n "$INSIDE_EMACS" ]]; then
     export EDITOR=emacsclient
     unset zle_bracketed_paste
 fi
@@ -129,7 +127,11 @@ bindkey "^X." zsh-insert-date                         # Bind it to ESC-.
 PROMPT='%n@%m:%/ $(git_prompt_info)
 $ '
 PROMPT_EOL_MARK="<EOL>"
-RPROMPT='$(date +"%Y-%m-%d %H:%M:%S") [$zsh_last_command_duration]'
+
+if [[ -z "$INSIDE_EMACS" ]]
+then
+  RPROMPT='$(date +"%Y-%m-%d %H:%M:%S") [$zsh_last_command_duration]'
+fi
 
 # show command timings in prompt
 typeset -F SECONDS=0
