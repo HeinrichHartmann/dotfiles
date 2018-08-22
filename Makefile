@@ -1,22 +1,34 @@
 dotcmd = bin/dotcmd
 
+basic: submodule-init tmux zsh bash bin
+
+full: basic emacs
+
 .PHONY:submodule-init
 submodule-init:
 	git submodule update --recursive --init
 
-full: basic emacs
+bin:
+	$(dotcmd) checkout .allrc
 
-basic: submodule-init
-	$(dotcmd) checkout .bashrc
+shell:
+	$(dotcmd) checkout bin
+	$(dotcmd) checkout .shell.d
+
+
+zsh: shell
 	$(dotcmd) checkout .zshrc
 	$(dotcmd) checkout .oh-my-zsh
-	$(dotcmd) checkout .allrc
-	$(dotcmd) checkout .shell.d
-	$(dotcmd) checkout bin
+
+bash: shell
+	$(dotcmd) checkout .bashrc
+
+tmux:
 	$(dotcmd) checkout .tmux.conf
 
 emacs:
 	$(dotcmd) checkout .emacs.d
+
 
 emacs-install:
 	mkdir -p scratch && cd scratch && \

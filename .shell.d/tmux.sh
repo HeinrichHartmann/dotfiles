@@ -2,7 +2,7 @@
 function lmux {
     title=${1:-lmux}
     shift
-    iterm2-title-set $title
+    iterm2-title-set "$title"
     iterm2-tab-color-set 192 192 192 # grey
     # The default-command causes the session name to be "reattach to
     # user namespace". Hence we override this name if we create a
@@ -16,11 +16,21 @@ function lmux {
 
 # remote tmux
 function rmux {
-    iterm2-title-set "$1"
+    iterm2-title-set "RMUX $1"
     iterm2-tab-color-set 135 206 250 # light blue
     title=${2:-main}
     ssh "$1" -t "tmux new-session -s $title -A"
 }
+
+
+# vagrant tmux
+function vmux {
+  iterm2-title-set "VMUX $1"
+  iterm2-tab-color-set 135 206 250 # light blue
+  title=${2:-main}
+  vagrant ssh "$1" -- -t "tmux new-session -s $title -A"
+}
+
 
 export DISABLE_AUTO_TILE=true
 
