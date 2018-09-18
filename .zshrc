@@ -125,24 +125,21 @@ bindkey "^X." zsh-insert-date                         # Bind it to ESC-.
 
 # PROMPT
 PROMPT='%n@%m:%/ $(git_prompt_info)
-$ '
+; '
 PROMPT_EOL_MARK="<EOL>"
 
-if [[ -z "$INSIDE_EMACS" ]]
-then
-  RPROMPT='$(date +"%Y-%m-%d %H:%M:%S") [$zsh_last_command_duration]'
-fi
-
-# show command timings in prompt
 typeset -F SECONDS=0
 function preexec() {
-    zsh_command_timer=$SECONDS
+  zsh_command_timer=$SECONDS
+  echo "# $(date +"%Y-%m-%d %H:%M:%S")"
 }
 function precmd() {
-    if [ $zsh_command_timer ]; then
-      zsh_last_command_duration=$(printf "%.3fs" $(($SECONDS - $zsh_command_timer)))
-      unset zsh_command_timer
-    fi
+  [[ $? == 0 ]] && _RC="OK" || _RC="FAILED($?)"
+  if [[ $zsh_command_timer ]]; then
+    _DURATION=$(printf "%.3fs" $(($SECONDS - $zsh_command_timer)))
+    echo "# $_RC after $_DURATION"
+    unset zsh_command_timer
+  fi
 }
 
 [[ -e ~/.allrc ]] &&  source ~/.allrc
