@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+if ! git diff-index --quiet --cached HEAD --
+then
+  echo "You have staged changes. Exiting."
+  exit 1
+fi
+
+if ! git diff-files --quiet
+then
+  echo "Stashing changes"
+  git stash save "REMASTER-WIP-$(date +%F-%s)"
+fi
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+TAG="REMASTER-WIP-$(date +%F-%s)-FROM-$BRANCH"
+git tag "$TAG"
+
+echo "Tagged $TAG"
+
+git fetch origin
+git checkout master
+
+if [[ $(git rev-parse master) != $(git rev-parse origin/master) ]]
+then
+   git tag "REMASTER-$(date +%F-%s)"
+   echo "Tagged master $TAG"
+fi
+
+git reset --hard origin/master

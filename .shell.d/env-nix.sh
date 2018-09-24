@@ -1,7 +1,4 @@
-if [[ -e $HOME/.nix-profile ]]
+if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]
 then
-
-    [ -f /export/home/hhartmann/.nix-profile/etc/profile.d/nix.sh ]  && \
-        source /export/home/hhartmann/.nix-profile/etc/profile.d/nix.sh
-
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
