@@ -10,7 +10,7 @@ function tl-commit {
 function tl-add {
   HEAD="$1"; shift
   BODY="$*"
-  printf "\n* %s \n%s\n" $(date +%Y-%m-%d) "$HEAD" "$BODY" >> "$TL_FILE"
+  printf "\n* %s %s\n%s\n" $(date +%Y-%m-%d) "$HEAD" "$BODY" >> "$TL_FILE"
   tl-commit
 }
 

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 if ! git diff-index --quiet --cached HEAD --
 then
@@ -11,22 +12,28 @@ fi
 if ! git diff-files --quiet
 then
   echo "Stashing changes"
-  git stash save "REMASTER-WIP-$(date +%F-%s)"
+  git stash save "REMASTER-WIP-$(date +%F-%s)-workdir"
 fi
-
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-TAG="REMASTER-WIP-$(date +%F-%s)-FROM-$BRANCH"
-git tag "$TAG"
-
-echo "Tagged $TAG"
 
 git fetch origin
-git checkout master
 
-if [[ $(git rev-parse master) != $(git rev-parse origin/master) ]]
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ "$BRANCH" != "master" ]]
 then
-   git tag "REMASTER-$(date +%F-%s)"
-   echo "Tagged master $TAG"
+  TAG="REMASTER-$(date +%F-%s)-WIP-$BRANCH"
+  git tag "$TAG"
+  echo "Tagged WIP $TAG"
+  git checkout master
 fi
+
+if git merge --ff-only origin/master
+then
+  exit 0
+fi
+
+# Could not fast fowrad
+git tag "REMASTER-$(date +%F-%s)-WIP-master"
+echo "Tagged current master/HEAD as $TAG"
 
 git reset --hard origin/master

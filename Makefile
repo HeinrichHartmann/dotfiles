@@ -29,7 +29,6 @@ tmux:
 emacs:
 	$(dotcmd) checkout .emacs.d
 
-
 emacs-install:
 	mkdir -p scratch && cd scratch && \
 	[ -e emacs-25.1.tar.gz ] || wget https://ftp.gnu.org/gnu/emacs/emacs-25.1.tar.gz && \
@@ -40,6 +39,15 @@ emacs-install:
         ./configure --prefix=$$HOME  && \
 	make && \
 	make install
+
+lynx-install:
+	mkdir -p scratch/lynx && cd scratch && \
+	[ -e lynx-cur.tar.gz ] || wget https://invisible-mirror.net/archives/lynx/tarballs/lynx-cur.tar.gz &&\
+	tar -C lynx -xzvf lynx-cur.tar.gz && \
+	cd lynx/lynx* && \
+	./configure --prefix=$$HOME && \
+	make
+
 
 lua-sh-install: # make lua available for scripting (sh replacement)
 	mkdir -p scratch && cd scratch && \

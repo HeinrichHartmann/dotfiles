@@ -1,15 +1,17 @@
 function xemacs {
-  opts=""
-  # opts="$opts --alternate-editor= " # start emacs if not running
-  opts="$opts --create-frame"      # always create a new frame
-  # opts="$opts --tty"               # start in a tty. Use emacsclient directly for a graphical session
-  # opts="$opts --socket-name=~/.emacs.d/server.socket" # specify socket
   if [[ -z "$*" ]]
   then
-    opts="$opts $(pwd)"
+    set -- "$(pwd)" # add to $@
   fi
+  set -- "--create-frame" "$@"
+  # opts="$opts --alternate-editor= " # start emacs if not running
+  # opts="$opts --tty"               # start in a tty. Use emacsclient directly for a graphical session
+  # opts="$opts --socket-name=~/.emacs.d/server.socket" # specify socket
   # Apparently eavl is needed to get the arguments separate properly 2018-07-05 zsh@5.2/OSX
-  eval "TERM=xterm-256color emacsclient $opts $@"
+  (
+    export TERM=xterm-256color
+    emacsclient "$@"
+  )
 }
 
 
