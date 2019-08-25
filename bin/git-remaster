@@ -18,22 +18,19 @@ fi
 git fetch origin
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
 if [[ "$BRANCH" != "master" ]]
 then
-  TAG="REMASTER-$(date +%F-%s)-WIP-$BRANCH"
-  git tag "$TAG"
-  echo "Tagged WIP $TAG"
+  echo "Tagging HEAD"
+  git tag "REMASTER-$(date +%F-%s)-WIP-$BRANCH"
   git checkout master
 fi
 
 if git merge --ff-only origin/master
 then
   exit 0
+else
+  # Could not fast fowrad
+  git tag "REMASTER-$(date +%F-%s)-WIP-master"
+  echo "Tagged current master/HEAD as $TAG"
+  git reset --hard origin/master
 fi
-
-# Could not fast fowrad
-git tag "REMASTER-$(date +%F-%s)-WIP-master"
-echo "Tagged current master/HEAD as $TAG"
-
-git reset --hard origin/master

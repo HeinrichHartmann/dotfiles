@@ -48,7 +48,6 @@ lynx-install:
 	./configure --prefix=$$HOME && \
 	make
 
-
 lua-sh-install: # make lua available for scripting (sh replacement)
 	mkdir -p scratch && cd scratch && \
 	[ -e lua-5.1.5.tar.gz ] || wget https://www.lua.org/ftp/lua-5.1.5.tar.gz && \
