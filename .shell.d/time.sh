@@ -15,4 +15,4 @@ alias epoch='date +%s'
 
 # Convert ISO Date to epoch
 function hh-date-to-epoch { $DATE -d"$1" +%s }
-function hh-eopoch-to-date { $DATE -d @"$1" -Isec }
+function hh-epoch-to-date { $DATE -d @"$1" -Isec }

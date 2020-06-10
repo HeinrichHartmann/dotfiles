@@ -1,10 +1,19 @@
 #
 # Todo.txt
 #
+
+# todo.txt CLI
+alias T=todo.sh
+
+
+alias TD=topydo
+
 TODO_DIR="$HOME/Dropbox/todo/"
-alias tde="emacs -nw todo.txt"
-#alias td="$HOME/git/todo.txt-cli/todo.sh -d $HOME/git/todo.txt-cli/todo.cfg"
-alias td=topydo
+alias tde="emacs -q -nw todo.txt"
+alias td="$HOME/git/todo.txt-cli/todo.sh -d $HOME/git/todo.txt-cli/todo.cfg"
+# alias td=topydo
+
+
 
 function tda {
     printf "%s" "Added: "

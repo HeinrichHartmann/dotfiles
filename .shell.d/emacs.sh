@@ -1,4 +1,4 @@
-function xemacs {
+function xemacsc {
   if [[ -z "$*" ]]
   then
     set -- "$(pwd)" # add to $@
@@ -15,7 +15,7 @@ function xemacs {
 }
 
 
-function emacs {
+function emacsc {
   opts=""
   # opts="$opts --alternate-editor= " # start emacs if not running
   opts="$opts --create-frame"      # always create a new frame

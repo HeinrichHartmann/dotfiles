@@ -1,6 +1,7 @@
 function YTDL {
+  DATE="$(date +"%F")"
   FOLDER="~/YTDL"
-  OPTS="--format '"'best[height<=760]'"' --recode-video mp4 --restrict-filenames -o '%(upload_date)s CHANNEL=%(uploader)s TITLE=%(title)s.%(ext)s'"
+  OPTS="--format '"'best[height<=760]'"' --recode-video mp4 --restrict-filenames -o '$DATE %(title)s via %(uploader)s.%(ext)s'"
   POST_CMD=""
   PRE_CMD=""
   REMOTE=""
@@ -41,10 +42,14 @@ function YTDL {
   done
   URL=$1
   shift
-  [[ $URL ]] || { echo "No URL provided"; return }
+  if [[ -z "$URL" ]]
+  then
+     echo "No URL provided"
+     return
+  fi
   OPTS="$OPTS $*"
   CMD="cd $FOLDER; $PRE_CMD youtube-dl $OPTS $URL $POST_CMD"
-  if [[ -n "$REMOTE" ]]
+  if [[ -n "$REMOTE" ]];
   then
     printf '%s\n' "$CMD" | ssh "$REMOTE" -- bash -x
   else

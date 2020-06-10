@@ -31,7 +31,7 @@ function cd()
 }
 
 # list all directories
-function lsd {
+function ls-d {
   ls -l $@ | grep ^d | cat
 }
 
@@ -39,7 +39,7 @@ function f {
   find . | grep $@
 }
 
-function csvls {
+function ls-csv {
   {
     printf '%s\t' T mtime owner perm size # header row
     printf '%s\n' name

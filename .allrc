@@ -14,7 +14,6 @@ function exists-p {
     command -v $1 >/dev/null 2>&1
 }
 
-
 PATH=""
 function add-to-path {
     if [[ -d $1 ]]
@@ -69,7 +68,6 @@ function add-to-man {
         MANPATH+=":$1"
     fi
 }
-
 add-to-man "/usr/share/man"
 add-to-man "/opt/local/man"
 add-to-man "/opt/local/share/man"

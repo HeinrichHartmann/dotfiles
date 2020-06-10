@@ -5,4 +5,4 @@ docker run -it --rm \
        -v "$(pwd):/home/jovyan/work" \
        -v "$HOME:/home/jovyan/host/home" \
        -v /:/home/jovyan/host/root \
-       heinrichhartmann/jupyter
+       heinrichhartmann/jupyter "$@"

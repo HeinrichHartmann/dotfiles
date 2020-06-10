@@ -1,10 +1,10 @@
-TL_FILE=~/notes/timeline.org
+TL_FILE=~/Notes/timeline.org
 
 function tl-commit {
   cd "$(dirname $TL_FILE)"
   git add "$TL_FILE"
   git commit -m "."
-  git show HEAD
+  git --no-pager show HEAD
 }
 
 function tl-add {
@@ -14,11 +14,11 @@ function tl-add {
   tl-commit
 }
 
-function tl-cat {
-  cat $TL_FILE
+function tl-edit {
+  emacs -nw -q "$TL_FILE"
+  tl-commit
 }
 
-function tl-edit {
-  emacsclient --create-frame --tty -e '(tl-edit "'"$TL_FILE"'")'
-  tl-commit
+function tl-cat {
+  cat $TL_FILE
 }
