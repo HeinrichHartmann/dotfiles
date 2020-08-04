@@ -1,0 +1,13 @@
+#!/bin/bash
+
+mkdir -p ~/tmp
+PREVIEW_FILE="$HOME/tmp/print_preview.ps"
+PREVIEW_FILE_PDF="$HOME/tmp/print_preview.pdf"
+
+rm "$PREVIEW_FILE"
+rm "$PREVIEW_FILE_PDF"
+
+cat  > "$PREVIEW_FILE" && \
+  gs -sOutputFile="$PREVIEW_FILE_PDF" -dNOPAUSE -dBATCH -sPAPERSIZE=a4 -sDEVICE=pdfwrite -dSAFER "$PREVIEW_FILE" > /dev/null && \
+  open "$PREVIEW_FILE_PDF"
+# ps2pdf "$PREVIEW_FILE" "$PREVIEW_FILE_PDF" && \
