@@ -29,12 +29,6 @@ add-to-path "/usr/sbin"
 add-to-path "/usr/bin"
 add-to-path "/sbin"
 add-to-path "/bin"
-add-to-path "/opt/gcc-4.8.1/bin"
-add-to-path "/opt/circonus/bin"
-add-to-path "/opt/circonus/java/bin"
-add-to-path "/opt/omni/bin"
-add-to-path "/opt/OMNIperl/bin"
-add-to-path "/usr/sfw/bin"
 export PATH
 
 export PAGER=less
@@ -42,8 +36,8 @@ export PAGER=less
 # locale settings
 # https://linux.die.net/man/7/locale
 #
-export LANG="C"            # use C locale everywhere
-export LC_CTYPE="UTF-8"    # ... except for character handling: we want to show Unicode
+# export LANG="C"            # use C locale everywhere
+# export LC_CTYPE="UTF-8"    # ... except for character handling: we want to show Unicode
 # OVERRIDES
 # export LC_COLLATE="$LOC"   # sorting
 # export LC_MESSAGES="$LOC"  # prompts for y/n
@@ -52,30 +46,7 @@ export LC_CTYPE="UTF-8"    # ... except for character handling: we want to show 
 # export LC_TIME="$LOC"      # strftime
 # OVERRIDES ALL OF THE ABOVE
 # export LC_ALL="$LOC"
-
-export TZ="utc"
-
-# explicitly inherit from /etc/manpath.config
-if exists-p manpath
-then
-    MANPATH="$(manpath)"
-else
-    MANPATH=""
-fi
-function add-to-man {
-    if [[ -d $1 ]]
-    then
-        MANPATH+=":$1"
-    fi
-}
-add-to-man "/usr/share/man"
-add-to-man "/opt/local/man"
-add-to-man "/opt/local/share/man"
-add-to-man "/opt/circonus/man"
-add-to-man "/opt/circonus/share/man"
-add-to-man "/opt/omni/man"
-add-to-man "/opt/omni/share/man"
-export MANPATH
+# export TZ="utc"
 
 # Coloring
 export LSCOLORS=ExFxCxDxBxegedabagacad
